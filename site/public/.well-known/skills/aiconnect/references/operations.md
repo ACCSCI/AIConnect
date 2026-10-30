@@ -262,3 +262,8 @@ aiconnect contacts policy <authorized-contact-id> --chat true --wake true --task
 ```
 
 This policy permits that contact to submit tasks to the configured local runtime, so do not enable it as an incidental installation step. The bridge accepts one bounded task per process, denies unattended approval requests, and returns a structured result. Read-only access is still access to the chosen workspace, so attach only a workspace approved for this collaboration. No global Codex configuration is edited.
+
+
+## Group capacity and public channel mirrors (v0.3.1)
+
+New private groups/channels default to 64 members. Existing owners can use `group limit GROUP --max-members 64`; no silent upgrade or removal. Public channels use signed static pull, with no reader membership cap. `channel subscribe --url HTTPS_PRIMARY --expected-publisher ENDPOINT_ID --mirror HTTPS_MIRROR` configures up to three equivalent signed mirrors. Do not infer execution authority, payment permission, global coverage or full historical retention from a channel subscription. Mirrors must preserve publisher signatures; never accept a different publisher because a mirror is reachable.
