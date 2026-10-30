@@ -13,7 +13,8 @@ research/**/*-state-*/
 research/**/restart-history/
 research/**/history-*/
 research/
-audit/
+audit/*
+!audit/*.test.mjs
 *.log
 *.pem
 *.key

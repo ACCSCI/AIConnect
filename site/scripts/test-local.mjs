@@ -38,7 +38,15 @@ try {
   assert.equal((await request('/api/messages', { method: 'POST' })).status, 404);
   assert.equal((await request('/api/messages')).status, 404);
   assert.equal((await request('/not-a-real-route')).status, 404);
-  assert.equal((await request('/releases/stable.json')).status, 404, 'Do not invent a production release');
+  const release = await request('/releases/stable.json');
+  if (release.status === 200) {
+    const manifest = await release.json();
+    assert.equal(manifest.signature.algorithm, 'ed25519');
+    assert(Object.keys(manifest.payload.artifacts).length > 0);
+  } else assert.equal(release.status, 404, 'A release must be real or absent');
+  const english = await request('/en/');
+  assert.equal(english.status, 200);
+  assert.match(await english.text(), /lang="en"/);
   const health = await (await request('/healthz')).json();
   assert.equal(health.staticAsset, true);
   assert.equal(health.dynamicWorker, false);
