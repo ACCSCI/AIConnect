@@ -1,0 +1,156 @@
+{
+  "date": "2026-10-30",
+  "status": "Final guard Release native daemon/MCP and full Core/A2A integration passed; previous releases retained in history. No source changes during this validation.",
+  "dependencies": {
+    "a2aSdk": "1.3.0",
+    "a2aProtocol": "1.0",
+    "mcpSdk": "1.32.2",
+    "express": "5.1.0",
+    "zod": "4.6.7"
+  },
+  "dependencyAudit": {
+    "registry": "https://registry.npmjs.org",
+    "vulnerabilities": 0,
+    "note": "Initial Zod 3 pin had GHSA-mrhx-c7xc-m3w5; upgraded before delivery. Mirror audit endpoint unsupported, official registry used."
+  },
+  "tests": [
+    {
+      "command": "npm test --prefix adapters/interop",
+      "passed": 9,
+      "scope": "Official A2A real HTTP/MCP SDK reference plus contract Core fixture, normalization, opt-in invocation, SSRF/body/budget/402429"
+    },
+    {
+      "command": "node --test adapters/test/adapter.test.mjs adapters/test/bridge.test.mjs adapters/test/notification.test.mjs",
+      "passed": 13,
+      "scope": "Fake Codex subprocess protocol, legacy task regression and strict independent notification authorization"
+    }
+  ],
+  "nativeDaemonPreliminary": {
+    "binarySha256": "4a04082ce559884946bb51f811dcdcb3d44dc86a913f2196f83e486381d654b7",
+    "mcpAndIpc": {
+      "passed": true,
+      "checks": 7,
+      "report": ".local/interop/db306a1a-5395-452c-b3fb-4bd6528772f3/report.json"
+    },
+    "fullA2A": {
+      "passed": true,
+      "checks": 7,
+      "observedDownloadBytes": 224599,
+      "report": ".local/interop-a2a/589da56d-62fb-4feb-a2ad-c484fa545671/report.json",
+      "networkFixture": "Logical reserved HTTPS origin mapped through test-only function dependency to real local HTTP SDK reference. No production private-URL override or TLS disable."
+    },
+    "notFinalRelease": true
+  },
+  "nativeDaemonRelease": {
+    "binary": "D:/Projects/AIConnect/target/release/aiconnect.exe",
+    "binarySha256": "927f51e9569c02f1037cbf70710111ebe59460f54ac1dc60ce154f0a1b46514c",
+    "binaryBytes": 29798912,
+    "mcpAndIpc": {
+      "passed": true,
+      "checks": 7,
+      "startedAt": "2026-10-30T12:23:22.085Z",
+      "finishedAt": "2026-10-30T12:23:25.280Z",
+      "report": ".local/interop/5fa4dd3e-726d-4d5d-90eb-9289b289b6fc/report.json"
+    },
+    "fullA2A": {
+      "passed": true,
+      "checks": 7,
+      "startedAt": "2026-10-30T12:23:32.232Z",
+      "finishedAt": "2026-10-30T12:23:34.724Z",
+      "observedDownloadBytes": 224599,
+      "auditEvents": 29,
+      "auditEventTypes": [
+        "owner.init",
+        "provider.add",
+        "owner.grant",
+        "admitted",
+        "service.invoke",
+        "service.dispatch",
+        "service.update",
+        "completed",
+        "service.review",
+        "service.cancel",
+        "owner.revoke"
+      ],
+      "report": ".local/interop-a2a/4f6859ac-b464-4490-b6ec-e304628b9b41/report.json",
+      "networkFixture": "Logical reserved HTTPS origin mapped through test-only function dependency to real local HTTP SDK reference; production HTTP policy unchanged"
+    },
+    "finalRegression": {
+      "interopSdkPassed": 9,
+      "adapterAndNotificationPassed": 13,
+      "failed": 0,
+      "modelTurns": 0,
+      "note": "22 unchanged JavaScript adapter tests passed in prior release round; this guard-binary round reran both native integration labs only, with no interop or notification source changes."
+    },
+    "cleanup": "Both dedicated native daemon profiles stopped; reference HTTP server closed"
+  },
+  "codexRuntimePreflight": {
+    "passed": true,
+    "codexVersion": "0.166.0",
+    "modelTurns": 0,
+    "disabledMcpServers": 6,
+    "report": ".local/notification-preflight/efb7d134-80c4-43ce-8b70-ffff73926133/report.json",
+    "scope": "Real installed app-server initialize/config/thread/MCP only, no generation"
+  },
+  "implemented": [
+    "Optional outbound official SDK A2A worker with atomic Core dispatch, durable TaskId polling, cancellation and local review",
+    "Explicit bearer-authenticated loopback native-service A2A ingress and Core SQLite TaskStore",
+    "MCP stdio default four read-only tools; invocation requires trusted local opt-in and real Core authorization",
+    "Unsigned provenance-preserving A2A/MCP metadata normalization and controlled MCP Registry GET",
+    "Independent restricted channel notification adapter branch"
+  ],
+  "remaining": [
+    "Public HTTPS standard A2A ingress with independently configured user-owned free endpoint",
+    "True WAN/NAT and public production provider availability",
+    "Real model-generated channel notification; current model-turn count is zero",
+    "OS-level sandbox assurance across supported platforms",
+    "No verified production free iroh relay list; interop does not change that"
+  ],
+  "noNewPaidInfrastructure": true,
+  "noDeployment": true,
+  "nativeDaemonReleaseHistory": [
+    {
+      "binary": "D:/Projects/AIConnect/target/release/aiconnect.exe",
+      "binarySha256": "0e19d24b151ef0f3bc629f3b04d41de543e0e934482fe7d77f96eb05a8d094ea",
+      "binaryBytes": 29799936,
+      "mcpAndIpc": {
+        "passed": true,
+        "checks": 7,
+        "startedAt": "2026-10-30T12:13:39.609Z",
+        "finishedAt": "2026-10-30T12:13:42.813Z",
+        "report": ".local/interop/050cf582-ad21-4dbf-8219-cd9f1bfa8001/report.json"
+      },
+      "fullA2A": {
+        "passed": true,
+        "checks": 7,
+        "startedAt": "2026-10-30T12:13:47.470Z",
+        "finishedAt": "2026-10-30T12:13:50.337Z",
+        "observedDownloadBytes": 224599,
+        "auditEvents": 29,
+        "auditEventTypes": [
+          "owner.init",
+          "provider.add",
+          "owner.grant",
+          "admitted",
+          "service.invoke",
+          "service.dispatch",
+          "service.update",
+          "completed",
+          "service.review",
+          "service.cancel",
+          "owner.revoke"
+        ],
+        "report": ".local/interop-a2a/85f1331d-75bd-4a55-8ca5-42b66c06dee7/report.json",
+        "networkFixture": "Logical reserved HTTPS origin mapped through test-only function dependency to real local HTTP SDK reference; production HTTP policy unchanged"
+      },
+      "finalRegression": {
+        "interopSdkPassed": 9,
+        "adapterAndNotificationPassed": 13,
+        "failed": 0,
+        "modelTurns": 0,
+        "note": "22 unchanged JavaScript adapter tests passed in prior release round; this guard-binary round reran both native integration labs only, with no interop or notification source changes."
+      },
+      "cleanup": "Both dedicated native daemon profiles stopped; reference HTTP server closed"
+    }
+  ]
+}

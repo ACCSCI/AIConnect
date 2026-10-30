@@ -1,0 +1,79 @@
+{
+  "checkedAt": "2026-10-30",
+  "status": "source review completed; no production free relay certified",
+  "scope": "No account registration, paid subscription, deployment, external publication, model calls or WAN acceptance performed by this review.",
+  "budget": {"projectPaysOnly": ["domain", "static website hosting"], "paidFallback": false, "sponsoredCredentials": false},
+  "candidates": [
+    {
+      "id": "n0-public",
+      "protocol": "iroh 1.x relay",
+      "price": "free community infrastructure",
+      "compatibility": "Existing AIConnect iroh 1.4.1 local forced-relay tests are recorded separately; not repeated by this source review.",
+      "purpose": "Official relay documentation describes development and testing and recommends against production workloads.",
+      "limits": "Traffic rate limits can change; no uptime guarantee; relay forwards encrypted traffic without durable message storage.",
+      "productionDefaultApproved": false,
+      "use": "Explicit development/testing opt-in only; do not advertise as production SLA or certified unrestricted production use.",
+      "sources": ["https://docs.iroh.computer/add-a-relay", "https://www.iroh.computer/pricing", "https://www.iroh.computer/blog/shared-relays"]
+    },
+    {
+      "id": "third-party-volunteer-iroh",
+      "protocol": "Must be compatible with pinned iroh 1.4.1; generic TURN, HTTP proxy and Nostr are not drop-in substitutes.",
+      "status": "No independently verified endpoint with clear free production-use permission found in this review.",
+      "productionDefaultApproved": false,
+      "use": "Empty production catalog until evidence and a real compatibility probe are supplied; never invent relay URLs or bypass provider limits."
+    },
+    {
+      "id": "cloudflare-static-assets",
+      "protocol": "HTTPS static content",
+      "use": "Website, Skill, explicit public descriptors/directories/channel files only; not a private-message relay.",
+      "limits": "Static asset request billing is separate from dynamic Worker invocations; dynamic bindings are outside the approved default budget.",
+      "sources": ["https://developers.cloudflare.com/workers/static-assets/billing-and-limitations/"]
+    },
+    {
+      "id": "nostr-public-relays",
+      "protocol": "Nostr events over WebSocket; distinct from iroh transport",
+      "use": "Optional explicitly public capability metadata, with separate signing key and native-identity binding.",
+      "status": "Protocol provides relay-information and payment/limit discovery. That does not establish every relay's permission, price or availability.",
+      "productionDefaultApproved": false,
+      "sources": ["https://github.com/nostr-protocol/nips/blob/master/11.md", "https://github.com/nostr-protocol/nips/blob/master/01.md"]
+    }
+  ],
+  "runtimeRecommendation": {
+    "default": "Direct-capable endpoint with no unapproved public/paid relay; report direct-best-effort and persistent pending explicitly.",
+    "development": "Enable n0 public relays only through explicit development/testing selection; preserve a clear status label.",
+    "userRelay": "Explicit user configuration with free-use evidence, protocol compatibility and check time; no project API/sponsor key.",
+    "failure": "Try approved compatible free choices, retain local outbox, pull surviving replicas, otherwise report unreachable. HTTP 402/429, fee changes or quota exhaustion disable/pause the affected provider. Never purchase or silently change billing tiers.",
+    "discovery": "Direct-only may reduce cross-NAT discovery and connection success. It is a budget-preserving fallback, not proof of global reachability."
+  },
+  "nostrReadOnlyProbe": {
+    "script": "scripts/six-layer-relay-probe.mjs",
+    "report": ".local/six-layer-relay-probe-1793360892168.json",
+    "checkedAt": "2026-10-30T11:48:00.579Z",
+    "publication": false,
+    "results": [
+      {"url": "https://nos.lol/", "nip11HttpStatus": 200, "websocketConnected": true, "eoseReceived": true, "paymentRequiredField": "not declared", "productionDefaultApproved": false, "termsUrl": "https://wikifreedia.xyz/nos.lol/", "termsReview": "URL supplied by provider but not accessible through the research tool; no production permission inferred"},
+      {"url": "https://relay.damus.io/", "nip11HttpStatus": 200, "websocketConnected": true, "eoseReceived": false, "error": "10-second bounded read timeout", "paymentRequiredField": "not declared", "productionDefaultApproved": false}
+    ],
+    "interpretation": "NIP-01 read connectivity and NIP-11 metadata do not establish free production/publication permission, durable storage, native Ed25519 binding or iroh transport support. No personal descriptor was published."
+  },
+  "releaseLocalAcceptance": {
+    "buildStage": "final-direct-only/custom-relay-conflict-guard; latest 16 checks passed against this exact binary",
+    "finishedAt": "2026-10-30T12:23:48.604Z",
+    "script": "lab/six-layer-acceptance.mjs",
+    "report": ".local/six-layer-acceptance/2026-10-30T12-23-19-027Z-3b1ead/report.json",
+    "binary": "target/release/aiconnect.exe",
+    "binarySha256": "927f51e9569c02f1037cbf70710111ebe59460f54ac1dc60ce154f0a1b46514c",
+    "preGuardHistoricalReport": ".local/six-layer-acceptance/2026-10-30T12-13-32-500Z-67a4a5/report.json",
+    "preGuardHistoricalSha256": "0e19d24b151ef0f3bc629f3b04d41de543e0e934482fe7d77f96eb05a8d094ea",
+    "checksPassed": 16,
+    "checksTotal": 16,
+    "runtimeMarkerQuiet": true,
+    "ownerDiscoveryRevocationChecked": true,
+    "unregisteredCustomRelayRejectedBeforeStartup": true,
+    "directOnlyCustomRelayConflictRejectedBeforeStartup": true,
+    "feeQuotaChanges": "Locally injected provider.check HTTP 402/429 and free=false disable registration without a paid fallback; not proof of automatic awareness of real commercial-term changes.",
+    "cleanup": "All three test daemons stopped; no matching processes remained in Windows process inventory.",
+    "scope": "One computer, real native processes/direct communication and SQLite profiles. No OS sandbox, model calls, publication, paid service, production-free relay approval or WAN/NAT acceptance."
+  },
+  "unverified": ["Real two-device different-network NAT traversal", "Production-permitted free third-party iroh relay", "Provider outage behavior under real WAN conditions", "All-platform installation", "No paid cloud billing account audit was performed"]
+}

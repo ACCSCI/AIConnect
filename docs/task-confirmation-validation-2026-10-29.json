@@ -1,0 +1,111 @@
+{
+  "date": "2026-10-29",
+  "feature": "Task confirmation v1; optional contractId, no contract engine or settlement",
+  "binary": {
+    "path": "target/debug/aiconnect.exe",
+    "sha256": "81fee09b4c7b081c2905f80ff44721de2628676080a9185de956334bd356c2bb"
+  },
+  "coreWorkflowTests": 4,
+  "regression": {
+    "startedAt": "2026-10-29T14:09:13.045Z",
+    "scope": "Local verification only; no deployment or publication",
+    "realAgents": false,
+    "checks": [
+      {
+        "name": "Rust workspace tests",
+        "status": "passed",
+        "elapsedMs": 26449
+      },
+      {
+        "name": "Native CLI build",
+        "status": "passed",
+        "elapsedMs": 958
+      },
+      {
+        "name": "Agent adapter tests",
+        "status": "passed",
+        "elapsedMs": 4565
+      },
+      {
+        "name": "Mini-environment harness tests",
+        "status": "passed",
+        "elapsedMs": 806
+      },
+      {
+        "name": "Signed installer tests",
+        "status": "passed",
+        "elapsedMs": 8735
+      },
+      {
+        "name": "Native blackbox acceptance",
+        "status": "passed",
+        "elapsedMs": 32432
+      },
+      {
+        "name": "Native IPC adversarial tests",
+        "status": "passed",
+        "elapsedMs": 1617
+      },
+      {
+        "name": "Native runtime policy tests",
+        "status": "passed",
+        "elapsedMs": 13812
+      },
+      {
+        "name": "Task confirmation native CLI",
+        "status": "passed",
+        "elapsedMs": 6488
+      },
+      {
+        "name": "Native forced relay transport",
+        "status": "passed",
+        "elapsedMs": 13512
+      },
+      {
+        "name": "Workers local route tests",
+        "status": "passed",
+        "elapsedMs": 424
+      },
+      {
+        "name": "Workers real local HTTP",
+        "status": "passed",
+        "elapsedMs": 3616
+      }
+    ],
+    "finishedAt": "2026-10-29T14:11:06.465Z",
+    "passed": true
+  },
+  "realAgents": {
+    "report": ".local/task-flow/2026-10-29T14-05-37-081Z-367285/report.json",
+    "startedAt": "2026-10-29T14:05:37.091Z",
+    "passed": true,
+    "realAgents": true,
+    "checks": [
+      "native CLI proposal/accept/deliver/request-changes/redeliver/review",
+      "proposal receipt and explicit acceptance do not auto-execute an attached runtime",
+      "task state and event history survive daemon restart",
+      "two real Agents negotiate confirmation and review a fixture delivery"
+    ],
+    "isolation": "Two local processes/profiles/workspaces under one OS user, not an OS security boundary",
+    "network": "Actual native iroh direct communication; no supervisor forwarding",
+    "agents": [
+      {
+        "status": "completed",
+        "tools": 3
+      },
+      {
+        "status": "completed",
+        "tools": 6
+      }
+    ],
+    "realTaskId": "3688f27f-4b2d-436e-8b1b-e0b2e45d647c",
+    "realEvents": [
+      "proposed",
+      "accepted",
+      "delivered",
+      "approved"
+    ],
+    "finishedAt": "2026-10-29T14:07:08.239Z"
+  },
+  "deploymentPerformed": false
+}

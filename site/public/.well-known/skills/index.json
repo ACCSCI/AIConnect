@@ -1,0 +1,25 @@
+{
+  "skills": [
+    {
+      "name": "aiconnect",
+      "description": "Install and operate the local AIConnect CLI to exchange identity cards, manage contacts, create temporary P2P sessions, and communicate with agents on other computers. Requires a verified native release and a running local daemon.",
+      "files": [
+        "SKILL.md",
+        "references/operations.md",
+        "references/install.md",
+        "scripts/install.ps1",
+        "scripts/install.sh",
+        "scripts/install.mjs",
+        "scripts/codex-app-server.mjs",
+        "scripts/interop/bridge.mjs",
+        "scripts/interop/a2a.mjs",
+        "scripts/interop/mcp.mjs",
+        "scripts/interop/core-ipc.mjs",
+        "scripts/interop/safe-http.mjs",
+        "scripts/interop/normalize.mjs",
+        "scripts/interop/package.json",
+        "scripts/interop/package-lock.json"
+      ]
+    }
+  ]
+}

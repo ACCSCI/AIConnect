@@ -1,0 +1,929 @@
+{
+  "date": "2026-10-30",
+  "scope": "Local only; no deployment/publication, no WAN capacity or model collaboration inference",
+  "artifact": {
+    "binary": "D:\\Projects\\AIConnect\\target\\release\\aiconnect.exe",
+    "sha256": "5e197fb93978e7bebedb9de919255411270a376f54ab913e41ba24d30eb190e3"
+  },
+  "finalRelease": {
+    "replicaRelay": true,
+    "replicaDirect16": true,
+    "passed": true
+  },
+  "rustTests": {
+    "passed": 27
+  },
+  "runtimePolicyTests": {
+    "passed": 7
+  },
+  "siteRouteTests": {
+    "passed": 3
+  },
+  "signedInstallerTests": {
+    "passed": 2
+  },
+  "skillValidation": true,
+  "officialSkillsCliInstall": {
+    "passed": true,
+    "resources": 7
+  },
+  "resolvedFailure": "Initial relay catch-up failed with a two-second peer budget; final code uses a twenty-second relay peer budget and a twenty-four-second total sync budget.",
+  "reports": [
+    {
+      "path": ".local\\group-replication\\2026-10-30T05-56-46-625Z-52d5b5\\report.json",
+      "startedAt": "2026-10-30T05:56:46.656Z",
+      "passed": true,
+      "relayOnly": false,
+      "checks": [
+        "new groups default to signed member replication; four identities explicitly join",
+        "owner offline: sender persists and another member receives signed message",
+        "owner and original sender offline: restarted member pulls the surviving replica",
+        "remaining members chat without owner; repeat sync is idempotent and restart retains log",
+        "owner returns: policy updates and removal deny further current group traffic"
+      ],
+      "scope": "Four independent native processes and SQLite profiles on one host; no models, WAN claim or deployment",
+      "binarySha256": "5ad242abf2124b06700e99a0e209ad93881355b3ded1379e4591526b48514f51",
+      "observedPath": {
+        "direct": true,
+        "peerId": "7dd408787951a7129cc8ba4897d880d640ebe47809b6496244030cc3526a9718",
+        "relay": false
+      },
+      "finishedAt": "2026-10-30T05:57:33.260Z"
+    },
+    {
+      "path": ".local\\group-chat\\2026-10-30T05-56-46-682Z-a1e831\\report.json",
+      "startedAt": "2026-10-30T05:56:46.701Z",
+      "passed": true,
+      "realAgents": false,
+      "relayOnly": false,
+      "checks": [
+        "three native nodes explicitly join bound group invitations",
+        "member fanout is durable, deduplicated and never grants execution",
+        "group inbox watch resumes a cursor and streams new messages",
+        "group roles, mute and protected owner enforced remotely",
+        "removed member cannot use old invitation; restart retains group history"
+      ],
+      "scope": "Same-host independent native profiles and workspaces; not an OS sandbox or WAN NAT test",
+      "routing": "Direct member fan-out; owner coordinates current membership authorization, website not involved",
+      "observedPath": {
+        "direct": true,
+        "peerId": "74f55a7c197a642de6fbf54759063230bad5af0fb4df2cf4db45bdce65171440",
+        "relay": false
+      },
+      "finishedAt": "2026-10-30T05:57:08.585Z"
+    },
+    {
+      "path": ".local\\group-replication\\2026-10-30T05-58-03-258Z-b43794\\report.json",
+      "startedAt": "2026-10-30T05:58:03.277Z",
+      "passed": false,
+      "relayOnly": true,
+      "checks": [
+        "new groups default to signed member replication; four identities explicitly join",
+        "owner offline: sender persists and another member receives signed message"
+      ],
+      "scope": "Four independent native processes and SQLite profiles on one host; no models, WAN claim or deployment",
+      "binarySha256": "5ad242abf2124b06700e99a0e209ad93881355b3ded1379e4591526b48514f51",
+      "error": "replica convergence deadline",
+      "finishedAt": "2026-10-30T05:59:37.510Z"
+    },
+    {
+      "path": ".local\\group-replication\\2026-10-30T05-59-16-205Z-600c6b\\report.json",
+      "startedAt": "2026-10-30T05:59:16.253Z",
+      "passed": true,
+      "relayOnly": false,
+      "checks": [
+        "new groups default to signed member replication; four identities explicitly join",
+        "owner offline: sender persists and another member receives signed message",
+        "owner and original sender offline: restarted member pulls the surviving replica",
+        "remaining members chat without owner; repeat sync is idempotent and restart retains log",
+        "owner returns: policy updates and removal deny further current group traffic"
+      ],
+      "scope": "Four independent native processes and SQLite profiles on one host; no models, WAN claim or deployment",
+      "binarySha256": "93c511858ecfffa832446c6c8b1b7ac4ecaaad15be0691109709599cb6e518fd",
+      "observedPath": {
+        "direct": true,
+        "peerId": "a690412fbf4d7778c316922f46ef64e0a6209ee833d30743dc6958c099a7d560",
+        "relay": false
+      },
+      "finishedAt": "2026-10-30T05:59:51.473Z"
+    },
+    {
+      "path": ".local\\group-replication\\2026-10-30T06-02-49-192Z-158ddb\\report.json",
+      "startedAt": "2026-10-30T06:02:49.204Z",
+      "passed": true,
+      "relayOnly": true,
+      "checks": [
+        "new groups default to signed member replication; four identities explicitly join",
+        "owner offline: sender persists and another member receives signed message",
+        "owner and original sender offline: restarted member pulls the surviving replica",
+        "remaining members chat without owner; repeat sync is idempotent and restart retains log",
+        "owner returns: policy updates and removal deny further current group traffic"
+      ],
+      "scope": "Four independent native processes and SQLite profiles on one host; no models, WAN claim or deployment",
+      "binarySha256": "54580569e45b3f56c5dbc7a0de4041420416e7e7b032a9ca33271d6555d7e914",
+      "observedPath": {
+        "direct": false,
+        "peerId": "0d83f2a4e710ec9843fec521aeed42cbceb13212ac398009672557dbcf071ab1",
+        "relay": true
+      },
+      "finishedAt": "2026-10-30T06:04:37.829Z"
+    },
+    {
+      "path": ".local\\group-chat\\2026-10-30T06-03-24-626Z-50de1e\\report.json",
+      "startedAt": "2026-10-30T06:03:24.644Z",
+      "passed": true,
+      "realAgents": false,
+      "relayOnly": true,
+      "checks": [
+        "three native nodes explicitly join bound group invitations",
+        "member fanout is durable, deduplicated and never grants execution",
+        "group inbox watch resumes a cursor and streams new messages",
+        "group roles, mute and protected owner enforced remotely",
+        "removed member cannot use old invitation; restart retains group history"
+      ],
+      "scope": "Same-host independent native profiles and workspaces; not an OS sandbox or WAN NAT test",
+      "routing": "Signed member replicas with local epoch validation; owner signs management changes, website not involved",
+      "observedPath": {
+        "direct": false,
+        "peerId": "5ef0de3158c1d49ff47ae95af5cd0196ddace654eabf5f8b457bb325e9ecd0d4",
+        "relay": true
+      },
+      "finishedAt": "2026-10-30T06:04:30.095Z"
+    },
+    {
+      "path": ".local\\group-replication\\2026-10-30T06-07-42-015Z-521021\\report.json",
+      "startedAt": "2026-10-30T06:07:42.029Z",
+      "passed": true,
+      "relayOnly": true,
+      "checks": [
+        "new groups default to signed member replication; four identities explicitly join",
+        "owner offline: sender persists and another member receives signed message",
+        "owner and original sender offline: restarted member pulls the surviving replica",
+        "remaining members chat without owner; repeat sync is idempotent and restart retains log",
+        "owner returns: policy updates and removal deny further current group traffic"
+      ],
+      "scope": "Four independent native processes and SQLite profiles on one host; no models, WAN claim or deployment",
+      "binarySha256": "5e197fb93978e7bebedb9de919255411270a376f54ab913e41ba24d30eb190e3",
+      "observedPath": {
+        "direct": false,
+        "peerId": "af9645d53ce17d71b54ee21ad3ed2f4fb9a2ac3efe9b135db03920d457c4a5c3",
+        "relay": true
+      },
+      "finishedAt": "2026-10-30T06:09:42.885Z"
+    }
+  ],
+  "pressure": [
+    {
+      "path": ".local\\group-pressure\\run-V0ll9G\\summary.json",
+      "startedAt": "2026-10-30T06:07:42.012Z",
+      "scope": "One Windows host, real independent release Rust daemons, direct-only iroh; no models, no WAN/relay capacity inference",
+      "binary": {
+        "path": "D:\\Projects\\AIConnect\\target\\release\\aiconnect.exe",
+        "sha256": "5e197fb93978e7bebedb9de919255411270a376f54ab913e41ba24d30eb190e3"
+      },
+      "definitions": {
+        "latency": "requestLatency=IPC send wall time; completionLatency=all-recipient durable ACK, including retries, observed from sender outbox read-only at 100ms resolution; warmup drained first",
+        "deliveryRate": "Recipient histories read independently; sender local copy excluded. deliveryRate includes failed intents; acceptedDeliveryRate includes only messages with a real persisted fanout outbox",
+        "memory": "Sampled every 2.5s: sum native private committed bytes plus working sets; summed working sets may double-count shared pages; harness memory separate"
+      },
+      "cases": [
+        {
+          "nodes": 16,
+          "startedAt": "2026-10-30T06:07:42.039Z",
+          "passed": true,
+          "protocol": "members-v1",
+          "workload": {
+            "steady": 4,
+            "burst": 4,
+            "concurrentSenders": 4,
+            "payloadBytes": 256,
+            "tokioWorkersPerNode": 2
+          },
+          "memorySamples": [
+            {
+              "at": "2026-10-30T06:07:47.226Z",
+              "freeBytes": 7627120640,
+              "totalWorkingSetBytes": 393601024,
+              "totalPrivateBytes": 65417216,
+              "ownerPrivateBytes": 4046848,
+              "maxNodePrivateBytes": 4300800,
+              "processes": [
+                {
+                  "pid": 7488,
+                  "workingSet": 24203264,
+                  "privateBytes": 4038656,
+                  "cpuSeconds": 0.140625
+                },
+                {
+                  "pid": 12688,
+                  "workingSet": 24244224,
+                  "privateBytes": 4046848,
+                  "cpuSeconds": 0.125
+                },
+                {
+                  "pid": 17496,
+                  "workingSet": 24915968,
+                  "privateBytes": 4235264,
+                  "cpuSeconds": 0.15625
+                },
+                {
+                  "pid": 33092,
+                  "workingSet": 24858624,
+                  "privateBytes": 4157440,
+                  "cpuSeconds": 0.125
+                },
+                {
+                  "pid": 33964,
+                  "workingSet": 24641536,
+                  "privateBytes": 4042752,
+                  "cpuSeconds": 0.125
+                },
+                {
+                  "pid": 35188,
+                  "workingSet": 24621056,
+                  "privateBytes": 4030464,
+                  "cpuSeconds": 0.078125
+                },
+                {
+                  "pid": 37436,
+                  "workingSet": 24248320,
+                  "privateBytes": 4046848,
+                  "cpuSeconds": 0.140625
+                },
+                {
+                  "pid": 41544,
+                  "workingSet": 24768512,
+                  "privateBytes": 4300800,
+                  "cpuSeconds": 0.09375
+                },
+                {
+                  "pid": 48132,
+                  "workingSet": 24543232,
+                  "privateBytes": 3919872,
+                  "cpuSeconds": 0.09375
+                },
+                {
+                  "pid": 50284,
+                  "workingSet": 24719360,
+                  "privateBytes": 4083712,
+                  "cpuSeconds": 0.09375
+                },
+                {
+                  "pid": 54364,
+                  "workingSet": 24178688,
+                  "privateBytes": 3960832,
+                  "cpuSeconds": 0.109375
+                },
+                {
+                  "pid": 58632,
+                  "workingSet": 24776704,
+                  "privateBytes": 4157440,
+                  "cpuSeconds": 0.125
+                },
+                {
+                  "pid": 62128,
+                  "workingSet": 24788992,
+                  "privateBytes": 4063232,
+                  "cpuSeconds": 0.140625
+                },
+                {
+                  "pid": 62628,
+                  "workingSet": 24715264,
+                  "privateBytes": 4071424,
+                  "cpuSeconds": 0.078125
+                },
+                {
+                  "pid": 63020,
+                  "workingSet": 24735744,
+                  "privateBytes": 4202496,
+                  "cpuSeconds": 0.109375
+                },
+                {
+                  "pid": 67100,
+                  "workingSet": 24641536,
+                  "privateBytes": 4059136,
+                  "cpuSeconds": 0.125
+                }
+              ],
+              "harnessRss": 58331136
+            },
+            {
+              "at": "2026-10-30T06:07:50.576Z",
+              "freeBytes": 6321934336,
+              "totalWorkingSetBytes": 491798528,
+              "totalPrivateBytes": 132583424,
+              "ownerPrivateBytes": 10833920,
+              "maxNodePrivateBytes": 10833920,
+              "processes": [
+                {
+                  "pid": 7488,
+                  "workingSet": 30511104,
+                  "privateBytes": 8282112,
+                  "cpuSeconds": 0.484375
+                },
+                {
+                  "pid": 12688,
+                  "workingSet": 32624640,
+                  "privateBytes": 10833920,
+                  "cpuSeconds": 1.09375
+                },
+                {
+                  "pid": 17496,
+                  "workingSet": 29945856,
+                  "privateBytes": 7434240,
+                  "cpuSeconds": 0.328125
+                },
+                {
+                  "pid": 33092,
+                  "workingSet": 30253056,
+                  "privateBytes": 7753728,
+                  "cpuSeconds": 0.3125
+                },
+                {
+                  "pid": 33964,
+                  "workingSet": 31174656,
+                  "privateBytes": 8667136,
+                  "cpuSeconds": 0.3125
+                },
+                {
+                  "pid": 35188,
+                  "workingSet": 30830592,
+                  "privateBytes": 8204288,
+                  "cpuSeconds": 0.34375
+                },
+                {
+                  "pid": 37436,
+                  "workingSet": 29941760,
+                  "privateBytes": 7536640,
+                  "cpuSeconds": 0.484375
+                },
+                {
+                  "pid": 41544,
+                  "workingSet": 30584832,
+                  "privateBytes": 7950336,
+                  "cpuSeconds": 0.390625
+                },
+                {
+                  "pid": 48132,
+                  "workingSet": 32473088,
+                  "privateBytes": 9973760,
+                  "cpuSeconds": 0.4375
+                },
+                {
+                  "pid": 50284,
+                  "workingSet": 30191616,
+                  "privateBytes": 7536640,
+                  "cpuSeconds": 0.421875
+                },
+                {
+                  "pid": 54364,
+                  "workingSet": 30347264,
+                  "privateBytes": 8069120,
+                  "cpuSeconds": 0.453125
+                },
+                {
+                  "pid": 58632,
+                  "workingSet": 30584832,
+                  "privateBytes": 8192000,
+                  "cpuSeconds": 0.421875
+                },
+                {
+                  "pid": 62128,
+                  "workingSet": 30425088,
+                  "privateBytes": 7909376,
+                  "cpuSeconds": 0.328125
+                },
+                {
+                  "pid": 62628,
+                  "workingSet": 30511104,
+                  "privateBytes": 8052736,
+                  "cpuSeconds": 0.34375
+                },
+                {
+                  "pid": 63020,
+                  "workingSet": 30412800,
+                  "privateBytes": 7815168,
+                  "cpuSeconds": 0.328125
+                },
+                {
+                  "pid": 67100,
+                  "workingSet": 30986240,
+                  "privateBytes": 8372224,
+                  "cpuSeconds": 0.515625
+                }
+              ],
+              "harnessRss": 56225792
+            },
+            {
+              "at": "2026-10-30T06:07:54.022Z",
+              "freeBytes": 6217035776,
+              "totalWorkingSetBytes": 462286848,
+              "totalPrivateBytes": 127008768,
+              "ownerPrivateBytes": null,
+              "maxNodePrivateBytes": 11640832,
+              "processes": [
+                {
+                  "pid": 7488,
+                  "workingSet": 33308672,
+                  "privateBytes": 11272192,
+                  "cpuSeconds": 1.40625
+                },
+                {
+                  "pid": 17496,
+                  "workingSet": 29286400,
+                  "privateBytes": 6774784,
+                  "cpuSeconds": 0.546875
+                },
+                {
+                  "pid": 33092,
+                  "workingSet": 29270016,
+                  "privateBytes": 6713344,
+                  "cpuSeconds": 0.609375
+                },
+                {
+                  "pid": 33964,
+                  "workingSet": 30085120,
+                  "privateBytes": 7561216,
+                  "cpuSeconds": 0.53125
+                },
+                {
+                  "pid": 35188,
+                  "workingSet": 30601216,
+                  "privateBytes": 8151040,
+                  "cpuSeconds": 0.640625
+                },
+                {
+                  "pid": 37436,
+                  "workingSet": 33337344,
+                  "privateBytes": 11640832,
+                  "cpuSeconds": 1.59375
+                },
+                {
+                  "pid": 41544,
+                  "workingSet": 33374208,
+                  "privateBytes": 11083776,
+                  "cpuSeconds": 1.15625
+                },
+                {
+                  "pid": 48132,
+                  "workingSet": 29143040,
+                  "privateBytes": 6610944,
+                  "cpuSeconds": 0.734375
+                },
+                {
+                  "pid": 50284,
+                  "workingSet": 29786112,
+                  "privateBytes": 7159808,
+                  "cpuSeconds": 0.6875
+                },
+                {
+                  "pid": 54364,
+                  "workingSet": 33652736,
+                  "privateBytes": 11501568,
+                  "cpuSeconds": 1.609375
+                },
+                {
+                  "pid": 58632,
+                  "workingSet": 29519872,
+                  "privateBytes": 7135232,
+                  "cpuSeconds": 0.8125
+                },
+                {
+                  "pid": 62128,
+                  "workingSet": 29609984,
+                  "privateBytes": 7102464,
+                  "cpuSeconds": 0.65625
+                },
+                {
+                  "pid": 62628,
+                  "workingSet": 30564352,
+                  "privateBytes": 8187904,
+                  "cpuSeconds": 0.90625
+                },
+                {
+                  "pid": 63020,
+                  "workingSet": 30375936,
+                  "privateBytes": 8024064,
+                  "cpuSeconds": 0.640625
+                },
+                {
+                  "pid": 67100,
+                  "workingSet": 30371840,
+                  "privateBytes": 8089600,
+                  "cpuSeconds": 0.734375
+                }
+              ],
+              "harnessRss": 59289600
+            },
+            {
+              "at": "2026-10-30T06:07:56.618Z",
+              "freeBytes": 6153338880,
+              "totalWorkingSetBytes": 488210432,
+              "totalPrivateBytes": 131837952,
+              "ownerPrivateBytes": 10485760,
+              "maxNodePrivateBytes": 10915840,
+              "processes": [
+                {
+                  "pid": 4188,
+                  "workingSet": 33267712,
+                  "privateBytes": 10485760,
+                  "cpuSeconds": 0.4375
+                },
+                {
+                  "pid": 7488,
+                  "workingSet": 31354880,
+                  "privateBytes": 9613312,
+                  "cpuSeconds": 1.5
+                },
+                {
+                  "pid": 17496,
+                  "workingSet": 29573120,
+                  "privateBytes": 6967296,
+                  "cpuSeconds": 0.59375
+                },
+                {
+                  "pid": 33092,
+                  "workingSet": 29368320,
+                  "privateBytes": 6684672,
+                  "cpuSeconds": 0.640625
+                },
+                {
+                  "pid": 33964,
+                  "workingSet": 30277632,
+                  "privateBytes": 7798784,
+                  "cpuSeconds": 0.671875
+                },
+                {
+                  "pid": 35188,
+                  "workingSet": 30048256,
+                  "privateBytes": 7798784,
+                  "cpuSeconds": 0.734375
+                },
+                {
+                  "pid": 37436,
+                  "workingSet": 31764480,
+                  "privateBytes": 9408512,
+                  "cpuSeconds": 1.90625
+                },
+                {
+                  "pid": 41544,
+                  "workingSet": 31236096,
+                  "privateBytes": 8798208,
+                  "cpuSeconds": 1.234375
+                },
+                {
+                  "pid": 48132,
+                  "workingSet": 29609984,
+                  "privateBytes": 7077888,
+                  "cpuSeconds": 0.828125
+                },
+                {
+                  "pid": 50284,
+                  "workingSet": 30068736,
+                  "privateBytes": 7606272,
+                  "cpuSeconds": 0.71875
+                },
+                {
+                  "pid": 54364,
+                  "workingSet": 31612928,
+                  "privateBytes": 10915840,
+                  "cpuSeconds": 1.71875
+                },
+                {
+                  "pid": 58632,
+                  "workingSet": 29609984,
+                  "privateBytes": 7069696,
+                  "cpuSeconds": 0.859375
+                },
+                {
+                  "pid": 62128,
+                  "workingSet": 29630464,
+                  "privateBytes": 7086080,
+                  "cpuSeconds": 0.703125
+                },
+                {
+                  "pid": 62628,
+                  "workingSet": 30027776,
+                  "privateBytes": 7946240,
+                  "cpuSeconds": 0.984375
+                },
+                {
+                  "pid": 63020,
+                  "workingSet": 30121984,
+                  "privateBytes": 7946240,
+                  "cpuSeconds": 0.6875
+                },
+                {
+                  "pid": 67100,
+                  "workingSet": 30638080,
+                  "privateBytes": 8634368,
+                  "cpuSeconds": 0.828125
+                }
+              ],
+              "harnessRss": 60006400
+            }
+          ],
+          "messages": [
+            {
+              "id": "6dee8b0b-28d8-40dd-abf8-81e64d3e672b",
+              "sender": 1,
+              "phase": "warmup",
+              "accepted": true,
+              "returned": true,
+              "requestMs": 386.08469999999943,
+              "acked": 15,
+              "pending": 0,
+              "rejected": 0,
+              "allAckMs": 386.08469999999943,
+              "receivedRecipients": 15
+            },
+            {
+              "id": "55f5f7c4-1e5d-46b9-95fb-2457e2d36245",
+              "sender": 2,
+              "phase": "warmup",
+              "accepted": true,
+              "returned": true,
+              "requestMs": 215.53120000000126,
+              "acked": 15,
+              "pending": 0,
+              "rejected": 0,
+              "allAckMs": 215.53120000000126,
+              "receivedRecipients": 15
+            },
+            {
+              "id": "5db34386-4068-4fa0-926a-d27a468f62d1",
+              "sender": 1,
+              "phase": "steady",
+              "accepted": true,
+              "returned": true,
+              "requestMs": 175.35549999999967,
+              "acked": 15,
+              "pending": 0,
+              "rejected": 0,
+              "allAckMs": 175.35549999999967,
+              "receivedRecipients": 15
+            },
+            {
+              "id": "3264198a-99c2-4969-8314-a54cd8f07943",
+              "sender": 2,
+              "phase": "steady",
+              "accepted": true,
+              "returned": true,
+              "requestMs": 168.702299999999,
+              "acked": 15,
+              "pending": 0,
+              "rejected": 0,
+              "allAckMs": 168.702299999999,
+              "receivedRecipients": 15
+            },
+            {
+              "id": "ad3e48dc-9396-42f6-95e0-f065546a5652",
+              "sender": 3,
+              "phase": "steady",
+              "accepted": true,
+              "returned": true,
+              "requestMs": 206.8194999999996,
+              "acked": 15,
+              "pending": 0,
+              "rejected": 0,
+              "allAckMs": 206.8194999999996,
+              "receivedRecipients": 15
+            },
+            {
+              "id": "b28f9aa2-2971-44e9-a8b1-a21545b67ef7",
+              "sender": 4,
+              "phase": "steady",
+              "accepted": true,
+              "returned": true,
+              "requestMs": 191.9290000000001,
+              "acked": 15,
+              "pending": 0,
+              "rejected": 0,
+              "allAckMs": 191.9290000000001,
+              "receivedRecipients": 15
+            },
+            {
+              "id": "3280563c-5c35-4796-8584-16fe76882caa",
+              "sender": 1,
+              "phase": "burst",
+              "accepted": true,
+              "allAckMs": 291.22459999999955,
+              "returned": true,
+              "requestMs": 291.9946,
+              "acked": 15,
+              "pending": 0,
+              "rejected": 0,
+              "receivedRecipients": 15
+            },
+            {
+              "id": "b3156058-8580-4415-95ea-62e9cfca27b0",
+              "sender": 2,
+              "phase": "burst",
+              "accepted": true,
+              "returned": true,
+              "requestMs": 290.8238999999994,
+              "acked": 15,
+              "pending": 0,
+              "rejected": 0,
+              "allAckMs": 290.8238999999994,
+              "receivedRecipients": 15
+            },
+            {
+              "id": "e49f5533-4914-46ff-b0a3-afc6b5838276",
+              "sender": 3,
+              "phase": "burst",
+              "accepted": true,
+              "allAckMs": 291.1376999999993,
+              "returned": true,
+              "requestMs": 291.5110999999997,
+              "acked": 15,
+              "pending": 0,
+              "rejected": 0,
+              "receivedRecipients": 15
+            },
+            {
+              "id": "e8103238-bed7-4148-97df-e923f8849e34",
+              "sender": 4,
+              "phase": "burst",
+              "accepted": true,
+              "returned": true,
+              "requestMs": 237.64559999999983,
+              "acked": 15,
+              "pending": 0,
+              "rejected": 0,
+              "allAckMs": 237.64559999999983,
+              "receivedRecipients": 15
+            },
+            {
+              "id": "fb304a03-bee0-404a-a105-c202e1d0ac60",
+              "sender": 1,
+              "phase": "owner-recovery",
+              "accepted": true,
+              "returned": true,
+              "requestMs": 280.1802000000007,
+              "acked": 15,
+              "pending": 0,
+              "rejected": 0,
+              "allAckMs": 280.1802000000007,
+              "receivedRecipients": 15
+            }
+          ],
+          "memoryBefore": {
+            "at": "2026-10-30T06:07:43.600Z",
+            "freeBytes": 8060067840,
+            "totalWorkingSetBytes": 0,
+            "totalPrivateBytes": 0,
+            "ownerPrivateBytes": null,
+            "maxNodePrivateBytes": 0,
+            "processes": [],
+            "harnessRss": 56393728
+          },
+          "admission": {
+            "members": 16,
+            "joinLatency": {
+              "samples": 15,
+              "minMs": 27.29779999999937,
+              "p50Ms": 92.39260000000013,
+              "p95Ms": 144.73809999999958,
+              "maxMs": 144.73809999999958
+            },
+            "snapshotRawBytes": 7139
+          },
+          "warmup": {
+            "attemptedMessages": 2,
+            "acceptedMessages": 2,
+            "expectedDeliveries": 30,
+            "receivedDeliveries": 30,
+            "deliveryRate": 1,
+            "acceptedDeliveryRate": 1,
+            "completionLatency": {
+              "samples": 2,
+              "minMs": 215.53120000000126,
+              "p50Ms": 215.53120000000126,
+              "p95Ms": 386.08469999999943,
+              "maxMs": 386.08469999999943
+            },
+            "fullAckPending": 0,
+            "drainMs": 31.708800000000338
+          },
+          "steady": {
+            "requestLatency": {
+              "samples": 4,
+              "minMs": 168.702299999999,
+              "p50Ms": 175.35549999999967,
+              "p95Ms": 206.8194999999996,
+              "maxMs": 206.8194999999996
+            },
+            "allAckLatency": {
+              "samples": 4,
+              "minMs": 168.702299999999,
+              "p50Ms": 175.35549999999967,
+              "p95Ms": 206.8194999999996,
+              "maxMs": 206.8194999999996
+            },
+            "initialAckRate": 1,
+            "requestErrors": 0,
+            "attemptedMessages": 4,
+            "acceptedMessages": 4,
+            "expectedDeliveries": 60,
+            "receivedDeliveries": 60,
+            "deliveryRate": 1,
+            "acceptedDeliveryRate": 1,
+            "completionLatency": {
+              "samples": 4,
+              "minMs": 168.702299999999,
+              "p50Ms": 175.35549999999967,
+              "p95Ms": 206.8194999999996,
+              "maxMs": 206.8194999999996
+            },
+            "fullAckPending": 0,
+            "drainMs": 31.91110000000117
+          },
+          "burst": {
+            "requestLatency": {
+              "samples": 4,
+              "minMs": 237.64559999999983,
+              "p50Ms": 290.8238999999994,
+              "p95Ms": 291.9946,
+              "maxMs": 291.9946
+            },
+            "allAckLatency": {
+              "samples": 4,
+              "minMs": 237.64559999999983,
+              "p50Ms": 290.8238999999994,
+              "p95Ms": 291.9946,
+              "maxMs": 291.9946
+            },
+            "initialAckRate": 1,
+            "requestErrors": 0,
+            "attemptedMessages": 4,
+            "acceptedMessages": 4,
+            "expectedDeliveries": 60,
+            "receivedDeliveries": 60,
+            "deliveryRate": 1,
+            "acceptedDeliveryRate": 1,
+            "completionLatency": {
+              "samples": 4,
+              "minMs": 237.64559999999983,
+              "p50Ms": 290.8238999999994,
+              "p95Ms": 291.22459999999955,
+              "maxMs": 291.22459999999955
+            },
+            "fullAckPending": 0,
+            "drainMs": 34.92619999999988
+          },
+          "ownerOffline": {
+            "attempts": [
+              {
+                "sender": 3,
+                "id": "a1033316-9679-480a-99ed-d5fa6f6050c6",
+                "ms": 2037.6342000000004
+              },
+              {
+                "sender": 1,
+                "id": "c6f9781d-9324-4a91-9ada-e7ac820a81d8",
+                "ms": 2038.7005000000008
+              },
+              {
+                "sender": 2,
+                "id": "c31cf519-ef67-4eae-bbcb-f46bad7ce399",
+                "ms": 2038.653400000001
+              }
+            ],
+            "allRejected": false,
+            "allAccepted": true,
+            "persistedOfflineAttempts": 45
+          },
+          "ownerRecovery": {
+            "attemptedMessages": 1,
+            "acceptedMessages": 1,
+            "expectedDeliveries": 15,
+            "receivedDeliveries": 15,
+            "deliveryRate": 1,
+            "acceptedDeliveryRate": 1,
+            "completionLatency": {
+              "samples": 1,
+              "minMs": 280.1802000000007,
+              "p50Ms": 280.1802000000007,
+              "p95Ms": 280.1802000000007,
+              "maxMs": 280.1802000000007
+            },
+            "fullAckPending": 0,
+            "drainMs": 49.1877999999997,
+            "requestMs": 280.1802000000007,
+            "restoredMembers": 16
+          },
+          "memory": {
+            "peakPrivateBytes": 132583424,
+            "peakWorkingSetBytes": 491798528,
+            "peakOwnerPrivateBytes": 10833920,
+            "maxNodePrivateBytes": 11640832,
+            "minFreeBytes": 6217035776
+          },
+          "finishedAt": "2026-10-30T06:07:58.394Z"
+        }
+      ],
+      "finishedAt": "2026-10-30T06:07:58.397Z"
+    }
+  ]
+}

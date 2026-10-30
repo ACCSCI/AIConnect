@@ -1,0 +1,133 @@
+{
+  "date": "2026-10-29",
+  "version": "0.3.0",
+  "platform": "Windows x64",
+  "stoppingPoint": "Local implementation and validation complete; no production deployment or publication executed",
+  "verification": {
+    "startedAt": "2026-10-29T13:44:25.878Z",
+    "scope": "Local verification only; no deployment or publication",
+    "realAgents": true,
+    "checks": [
+      {
+        "name": "Rust workspace tests",
+        "status": "passed",
+        "elapsedMs": 14417
+      },
+      {
+        "name": "Native CLI build",
+        "status": "passed",
+        "elapsedMs": 1013
+      },
+      {
+        "name": "Agent adapter tests",
+        "status": "passed",
+        "elapsedMs": 4605
+      },
+      {
+        "name": "Mini-environment harness tests",
+        "status": "passed",
+        "elapsedMs": 939
+      },
+      {
+        "name": "Signed installer tests",
+        "status": "passed",
+        "elapsedMs": 7827
+      },
+      {
+        "name": "Native blackbox acceptance",
+        "status": "passed",
+        "elapsedMs": 31809
+      },
+      {
+        "name": "Native IPC adversarial tests",
+        "status": "passed",
+        "elapsedMs": 1599
+      },
+      {
+        "name": "Native runtime policy tests",
+        "status": "passed",
+        "elapsedMs": 14318
+      },
+      {
+        "name": "Native forced relay transport",
+        "status": "passed",
+        "elapsedMs": 15593
+      },
+      {
+        "name": "Workers local route tests",
+        "status": "passed",
+        "elapsedMs": 501
+      },
+      {
+        "name": "Workers real local HTTP",
+        "status": "passed",
+        "elapsedMs": 3698
+      },
+      {
+        "name": "Real dual-Agent collaboration",
+        "status": "passed",
+        "elapsedMs": 69858
+      }
+    ],
+    "finishedAt": "2026-10-29T13:47:12.060Z",
+    "passed": true
+  },
+  "binary": {
+    "path": "target/debug/aiconnect.exe",
+    "bytes": 32122368,
+    "sha256": "8f7b5a97dcdb11c43fcc2a4461c7458d94cd66ca8cf65a10671de921a2faf2ad"
+  },
+  "realAgentLab": ".local/lab-runs/2026-10-29T13-46-02-357Z-fb35fd/report.json",
+  "agents": {
+    "a": {
+      "status": "completed",
+      "runtime": "codex",
+      "toolCount": 6
+    },
+    "b": {
+      "status": "completed",
+      "runtime": "codex",
+      "toolCount": 1
+    },
+    "collaboration": {
+      "planVerified": true,
+      "bOnlyFixtureRead": true,
+      "nativeMessageCount": 2,
+      "taskRoundLimit": 1
+    }
+  },
+  "relayLab": ".local/lab-runs/2026-10-29T13-45-42-560Z-770bb5/report.json",
+  "relayPaths": {
+    "a": {
+      "direct": false,
+      "peerId": "1d6e281f6855943cb7e4f30a4a9a3b9258863900c381800f81a57348404386d9",
+      "relay": true
+    },
+    "b": {
+      "direct": false,
+      "peerId": "48925ee971de1a3fd533ed3b1c34ef2691fff938f8940be647aa728459583c80",
+      "relay": true
+    }
+  },
+  "website": {
+    "target": "Cloudflare Workers Static Assets",
+    "preview": "http://127.0.0.1:8787",
+    "skillResources": [
+      "SKILL.md",
+      "references/operations.md",
+      "references/install.md",
+      "scripts/install.ps1",
+      "scripts/install.sh",
+      "scripts/install.mjs",
+      "scripts/codex-app-server.mjs"
+    ],
+    "deployed": false
+  },
+  "limits": [
+    "Same-host logical process/workspace isolation, not an OS security sandbox",
+    "External heterogeneous NAT and actual firewall path transition unverified",
+    "Only Windows x64 native artifact executed locally; other platform workflow definitions not runtime verification",
+    "Production release signing configuration and publication intentionally not performed",
+    "Groups, general software migration and hosted offline mailbox are later phases"
+  ]
+}

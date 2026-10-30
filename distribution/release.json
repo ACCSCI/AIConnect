@@ -1,0 +1,8 @@
+{
+  "schemaVersion": 1,
+  "version": "0.3.0",
+  "repository": "https://github.com/ACCSCI/AIConnect",
+  "manifestUrl": "https://connect.lumigrav.space/releases/stable.json",
+  "publicKey": "MCowBQYDK2VwAyEAubdppWBlKweZ1XkjVVBsEYNKO3IFBNqQeyT50/ah7vI=",
+  "signatureAlgorithm": "ed25519"
+}

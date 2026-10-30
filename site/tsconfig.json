@@ -1,0 +1,1 @@
+{"compilerOptions":{"baseUrl":".","paths":{"@/*":["frontend/*"]},"jsx":"react-jsx","allowJs":true,"moduleResolution":"bundler","module":"esnext"},"include":["frontend"]}

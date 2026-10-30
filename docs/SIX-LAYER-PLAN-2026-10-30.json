@@ -1,0 +1,655 @@
+{
+  "title": "AIConnect 六层网络能力实施计划",
+  "date": "2026-10-30",
+  "status": "方案与调研；本轮未实现六层新模块，未部署或开通第三方服务",
+  "objective": "Agent 从一个 CLI 入口发现人、设备、能力与频道，在可核验授权下通信、订阅和协作。默认不运营中央聊天、搜索、账户或消息数据库。",
+  "existingFoundation": [
+    "Rust CLI/daemon、认证本地 IPC、SQLite",
+    "iroh P2P 与实际公共中转测试",
+    "联系人、临时连接、群权限及成员复制日志",
+    "任务提议/接受/交付/验收、可选运行时适配",
+    "本地 Skill 发现与安装链路"
+  ],
+  "threatModel": [
+    "本地 daemon 与宿主 OS 属于信任边界；同一 OS 账户下的数据目录不是抵御恶意本地程序的沙箱。",
+    "根签名凭据在管理端保护，执行端只获得限范围委托；不将根密钥分发给每个 Agent。",
+    "需要运行不可信本地 Agent 时，采用独立受限账户或容器并单独验收；不能把远程协议权限宣传为操作系统隔离。"
+  ],
+  "principles": [
+    "项目方只承担域名和纯静态网站托管；所有默认连接/发现服务必须无需项目方付费，禁止自动升级或付费回退。",
+    "P2P-first 适用于原生通信；静态发现与公共内容可走 HTTPS/CDN，不能把所有第三方 Agent 都声称为 P2P。",
+    "发现、认证、授权、执行分别判定；公开可发现不表示自动加好友、唤醒、执行或付款。",
+    "信任以本地策略与可核验证据为依据，目录和中转均不是权限签发者。",
+    "所有公开发布均显式选择；个人默认 private，不上传通讯录、私聊、密钥和内网地址。",
+    "已有签名群协议不做无版本兼容破坏；新的跨实现描述符单独版本化。",
+    "协议、SDK、服务版本在互通验证后固定；研究时的 latest 不直接作为发布依赖。",
+    "六层全部进入主线，但治理基线从第一阶段生效，不等公共网络上线后补权限。"
+  ],
+  "architecture": {
+    "owned": "每台设备的本地 daemon、规范化模型、SQLite 索引、签名和授权校验、协议适配与 CLI",
+    "reused": "mDNS/DNS-SD、HTTPS/DNS、静态 CDN、第三方 Nostr relays、条款允许且兼容的免费 relay（候选需验证）、A2A 官方 JS SDK、MCP 官方 Registry、RSS/Atom/JSON Feed",
+    "noCentralServiceRequired": [
+      "中央聊天数据库",
+      "中央账户登录系统",
+      "中央实时搜索服务",
+      "中央消息转发服务"
+    ],
+    "notZeroInfrastructure": "复用第三方免费服务而非平台付费托管；服务商承担其运营成本，可限流、修改条款或停服。设备仍运行 Agent；不承诺永久免费且全球可达。",
+    "deploymentModes": [
+      {
+        "id": "personal",
+        "name": "个人/私有模式",
+        "discovery": "配对邀请 + 显式启用的 LAN mDNS",
+        "network": "iroh 直连优先，免费兼容中转仅在用途条款允许时启用；不可用则排队/提示",
+        "backend": "无 AIConnect 中央后端",
+        "tradeoff": "免费兼容中转不足时不能保证跨 NAT 连通；需要存活副本，LAN 服务存在性可能被观察"
+      },
+      {
+        "id": "public",
+        "name": "公开网络模式",
+        "discovery": "公开签名描述符 + 多来源静态目录 + 可选 Nostr 公告",
+        "network": "原生直连/获准的免费中转；公共频道走静态 CDN；外部服务按其 HTTPS 接口访问",
+        "backend": "仍无需 AIConnect 常驻中央服务",
+        "tradeoff": "公开元数据可被记录；目录可能陈旧，免费服务限流/收费时停用而非自动付款"
+      },
+      {
+        "id": "interop",
+        "name": "HTTP 互操作模式",
+        "discovery": "A2A Agent Card / MCP Registry",
+        "network": "本地可选官方 A2A SDK sidecar；公网入站只使用用户已有且明确免费的 HTTPS/Tunnel，非必选项",
+        "backend": "适配器运行在用户机器，不建设中央 A2A 网关",
+        "tradeoff": "需要 Node、服务认证和可选域名/Tunnel；HTTPS 这一段不是原生 iroh P2P"
+      }
+    ]
+  },
+  "layers": [
+    {
+      "id": "discovery",
+      "name": "发现系统",
+      "current": "名片与邀请；没有应用层全球能力发现",
+      "deliverables": [
+        "本机缓存、LAN、组织可信目录、公共公告四个 DiscoveryProvider",
+        "多目录导入与本地 SQLite FTS5 标签/语言/系统/能力过滤",
+        "显式公开的 Nostr 可替换能力公告与失效时间",
+        "断网缓存结果标明来源、验证时间和过期状态；任何索引结果都重新验证原始签名"
+      ],
+      "reuse": [
+        "mDNS/DNS-SD (mdns-sd)",
+        "静态 HTTPS 目录 + DNS 地址指针",
+        "SQLite FTS5，先验证构建特性与中文检索策略",
+        "nostr-sdk；NIP-01/65/78，经服务商兼容性探测"
+      ],
+      "ownGlue": [
+        "DiscoveryProvider 统一接口与去重合并",
+        "目录 schema 与缓存生命周期",
+        "公开公告到本地 capability 的映射"
+      ],
+      "boundaries": [
+        "mDNS 只能发现局域网服务，不跨互联网，也不证明相同主人",
+        "Nostr 仅公开元数据，不发送私人群、通讯录或私聊正文",
+        "没有未知目录/relay 的神奇全网搜索；不保证发现未公开或未索引的 Agent",
+        "不依赖 relay 的全局语义搜索能力；语义理解由本地 Agent 转为结构化过滤",
+        "默认仅连接免费且允许该用途的源；收费、试用到期或限额耗尽时停用，不使用项目付费凭据。"
+      ],
+      "acceptance": [
+        "同一 LAN 两个已配对的 owner Agent 可发现；陌生 owner 不自动连接",
+        "两个独立目录去重，一源下线另一源仍可用",
+        "伪造、过期公告和替换密钥被拒绝；断网显示陈旧缓存",
+        "可选公共 relays 完成发布/读取往返；不支持或拒收时回退静态目录而非声称成功"
+      ]
+    },
+    {
+      "id": "capabilities",
+      "name": "能力描述",
+      "current": "联系人名片不构成机器可验证的服务接口",
+      "deliverables": [
+        "版本化 NativeDescriptor：身份、能力 ID、描述、输入输出 schema、语言/系统、授权与价格声明、传输、有效期、来源与资源上限",
+        "JSON Schema 校验、只读 inspect 与 dry-run",
+        "A2A Agent Card 导入/转换及 MCP 服务条目规范化；不把 MCP server 当作完整 Agent",
+        "签名覆盖规范化字节，提供跨 Rust/JS 测试向量"
+      ],
+      "reuse": [
+        "JSON Schema 2020-12 (jsonschema)",
+        "RFC 8785 JCS 用于新描述符格式",
+        "A2A Agent Card 语义与官方 SDK",
+        "MCP Registry 元数据"
+      ],
+      "ownGlue": [
+        "AIConnect 自有能力字段与命名空间",
+        "NativeDescriptor / A2A / MCP 之间的有损映射和 provenance 标签"
+      ],
+      "boundaries": [
+        "原生 iroh-only Agent 使用 NativeDescriptor；仅在真实 HTTP A2A 接口启用时导出可用的标准 A2A endpoint",
+        "能力自述不是能力认证；价格也是提供者声明",
+        "默认禁止远程 schema 引用、代码下载与自动运行，限制解析体积、深度和时间"
+      ],
+      "acceptance": [
+        "Rust/JS 签名和 schema 测试向量一致",
+        "未知必需版本拒绝，额外可选字段不破坏兼容",
+        "目录文字中的 prompt injection 不变成系统指令或授权",
+        "inspect 不执行任务、不产生隐式付费调用"
+      ]
+    },
+    {
+      "id": "trust",
+      "name": "身份与信任",
+      "current": "公钥身份已有；owner 标签仍为自声明",
+      "deliverables": [
+        "独立的账户 OwnerRoot 与设备 AgentKey；区别于某个群的 owner 角色",
+        "一次性配对授予短期、限范围的 AgentDelegation；根私钥不复制给每个 Agent",
+        "可选 DNS/HTTPS 域名控制证明、身份固定、密钥轮换、撤权清单和 TTL",
+        "TrustEvidence 分类展示：作者签名、owner 授权、域名控制、已核验交付、仍未验证的声明"
+      ],
+      "reuse": [
+        "现有 iroh Ed25519 身份",
+        "DNS + HTTPS well-known 自定义证明文件",
+        "OS 凭据库与用户自有 OAuth/API key；外部服务沿用其认证"
+      ],
+      "ownGlue": [
+        "owner 授权/撤权 schema 与有限 scope 校验",
+        "原生 Ed25519 与 Nostr secp256k1 身份的双向签名绑定、轮换与有效期",
+        "本地信任决策，而非全网信用分"
+      ],
+      "boundaries": [
+        "域名控制不等于法律主体或服务质量；签名不证明声明内容真实",
+        "Nostr 密钥与 iroh 密钥不同，不能复用私钥或把 NIP-05 当真人认证",
+        "关键操作要求未过期授权及规定的新鲜撤权状态；不可新鲜验证时拒绝；聊天仍遵循分区最终一致性",
+        "已有内容不能靠撤权强制从别人机器删除"
+      ],
+      "acceptance": [
+        "伪造同主人证书、过期委托、错误 audience、重放 nonce 均拒绝",
+        "合法轮换可恢复，未经授权的域名/目录换钥触发冲突而非静默替换",
+        "撤权后的服务执行被阻断；分区聊天与执行采用不同规则",
+        "备份恢复保留根/设备关系，丢失密钥有明确重新配对流程"
+      ]
+    },
+    {
+      "id": "subscriptions",
+      "name": "频道、订阅与通知",
+      "current": "已有多人群复制，没有独立频道/公共订阅模型",
+      "deliverables": [
+        "私聊、协作群、单向频道、可调用服务四类对象",
+        "私有小频道复用签名群日志，加发布者 ACL 与本地订阅游标",
+        "公共频道使用静态签名 JSON 清单及 RSS/Atom/JSON Feed 镜像，客户端条件请求与退避轮询",
+        "事件 ID/游标、断线补齐、取消订阅、静音、保留窗口与缺页提示；可选本地已授权运行时通知"
+      ],
+      "reuse": [
+        "现有群成员复制与 SQLite",
+        "feed-rs + RSS/Atom/JSON Feed",
+        "HTTPS CDN 的 ETag/Last-Modified",
+        "现有宿主系统通知；可选 WebSub 仅在用户具备可达 callback 时"
+      ],
+      "ownGlue": [
+        "发布者 ACL 与签名事件模型",
+        "不同 feed 的来源、签名等级和游标映射",
+        "本地安全发布：输出静态目录后再调用用户授权的托管部署工具"
+      ],
+      "boundaries": [
+        "普通第三方 RSS 没有作者签名时只标 HTTPS 来源，不能伪造为签名内容",
+        "公共大频道不使用小群全员 P2P 扇出；借助 CDN 分发",
+        "订阅不是执行授权；唤醒运行时不等于远程开机",
+        "没有存活副本且不启用额外托管存储时，不保证离线期间的新私人消息可立即获取"
+      ],
+      "acceptance": [
+        "发布者和读取者权限分开，读者不能伪造频道消息",
+        "发布者离线后其他私有副本或已发布 CDN 内容仍可读取",
+        "重启/断线补齐不重复，历史缺页显式报告",
+        "取消订阅不再通知；超预算事件不触发无界模型互聊"
+      ]
+    },
+    {
+      "id": "collaboration",
+      "name": "通用协作",
+      "current": "原生双方任务确认与一个运行时适配器已有",
+      "deliverables": [
+        "统一服务 inspect/quote/invoke/status/cancel/result 的本地 Job 模型",
+        "复用原生任务确认，增加进度、截止期、幂等键、取消请求与可核验产物清单",
+        "用官方 @a2a-js/sdk 构建可选本地 sidecar，默认先出站，入站 HTTP 按需开放",
+        "MCP 作为本地工具接入及受控发现入口，不替代 Agent 身份和任务网络；API key/OAuth 凭据只在各自设备保存"
+      ],
+      "reuse": [
+        "现有任务确认与认证 IPC",
+        "官方 A2A JS SDK，固定通过互通测试的版本",
+        "官方 MCP Registry 与 MCP SDK（实际接入版本在 spike 固定）",
+        "可选用户已有且明确免费的 HTTPS/Tunnel；无平台订阅"
+      ],
+      "ownGlue": [
+        "Core Job 的唯一状态源与 SDK TaskStore/adapter 映射，避免新增中央数据库",
+        "外部完成映射为已交付待验收，而非自动完成",
+        "HTTP provider 认证观察与原生作者签名的证据等级区分"
+      ],
+      "boundaries": [
+        "iroh 原生消息不是现成的 A2A 标准传输；HTTP sidecar 是显式协议适配",
+        "取消只是请求，不保证撤销已发生的外部副作用",
+        "服务不支持幂等时，不自动重试有副作用/付费操作；不声称 exactly-once",
+        "报价与费用上限不是自动付款或结算；外部提供者不支持硬预算时必须明示限制",
+        "免费服务为默认；收费或价格未知的调用须由使用者单独承担并明确授权，不由项目方垫付。"
+      ],
+      "acceptance": [
+        "与官方 SDK 参考 Agent 跑发现、认证、委托、进度、取消、断线查询和交付",
+        "外部 completed 仍需本地验收；拒绝/超时/取消不丢审计证据",
+        "越权 schema/资源范围拒绝；SDK 无法绕过本地策略",
+        "Tunnel/sidecar 下线不影响原生 P2P 联系与群聊"
+      ]
+    },
+    {
+      "id": "governance",
+      "name": "公共网络治理",
+      "current": "本地聊天/唤醒/执行权限与屏蔽已有，缺公共发现后的统一限额",
+      "deliverables": [
+        "陌生联系请求箱默认不唤醒、不执行；owner/peer/全局多级速率与并发上限",
+        "模型轮数、调用数、存储、下载、任务时限及预算阈值；防双方 Agent 无限互答",
+        "发现抓取的 SSRF/DNS 重绑定防护、响应体积限制、schema 资源边界、来源隔离",
+        "本地阻止/允许策略、可导入但需采纳的组织策略包、签名交付证据与可导出审计日志",
+        "free-only 提供者策略：免费资格/用途/兼容性/检查时间、超限暂停、无平台付费密钥及无付费回退。"
+      ],
+      "reuse": [
+        "现有本地认证 IPC/策略/SQLite",
+        "成熟 HTTP 客户端、速率限制组件、OS 凭据保护",
+        "第三方 relay 的认证/限额作为附加边界，不作为本地权限替代"
+      ],
+      "ownGlue": [
+        "有限且可解释的策略与预算预留/释放",
+        "持久化去重、重启后不重置预算的计数",
+        "跨适配器统一执行前校验"
+      ],
+      "boundaries": [
+        "无中央黑名单管理员，无付费刷分排行榜，不用公钥数量冒充真实用户数",
+        "防 Sybil 依赖本机全局上限和可信 owner 关系，无法靠每公钥限速根治",
+        "私人内容不进入公共模型搜索服务；高危执行不会因为群里出现自然语言而放行"
+      ],
+      "acceptance": [
+        "陌生 key 洪泛、超大描述符、恶意 redirect/内网 URL 均被资源上限挡住",
+        "预算与撤权在执行前重验，重启后仍保留约束",
+        "两个可互聊 Agent 在指定轮数上限停止，保留原因和账目",
+        "目录/频道恶意提示不能越权调用文件系统、shell 或外部付费接口",
+        "模拟免费额度耗尽、HTTP 402/429、服务收费与下线，确认只排队/停用且不调用付费端点。"
+      ]
+    }
+  ],
+  "dataContracts": {
+    "nativeDescriptor": "schemaVersion, agentId, ownerProof?, skills[], inputSchema/outputSchema, transports[], visibility, issuedAt, expiresAt, revision, signature；示例字段为拟定扩展，不声称现有标准。",
+    "capability": "stable skillId, version, language, OS, sideEffectClass, resourceScopes, authRequirements, declaredPrice, limits；声明与验证分开。",
+    "delegation": "ownerId, agentId, audience, scopes, notBefore, expiresAt, maxCalls?, noncePolicy, issuerSignature, revocationRef；owner root 与群 owner 不混用。",
+    "channel": "channelId, publisherKeys, visibility, retentionPolicy, eventId/sequence, previousRef, body/artifactRefs, source, signature/provenance, cursor。",
+    "job": "jobId, requestId, provider, transport, inputDigest, grantRef, deadline, budget, idempotencyKey, providerStatus, localReviewStatus, artifactManifest, auditRefs。",
+    "trustEvidence": "evidenceType, subjectKey, issuer, sourceURL?, verifiedAt, validUntil, verificationMethod, result；不直接计算全网信誉分。",
+    "storage": "添加 descriptor/cache/source/cursor、owner grant/revocation、channel subscription、job/provider mapping、policy/budget 表；继续 SQLite；不建新中央数据库。"
+  },
+  "proposedCli": [
+    "owner init / pair / grant / revoke / rotate / inspect",
+    "profile set --visibility private|lan|public",
+    "capability publish / inspect / validate / dry-run",
+    "discover --scope mine|trusted|public --capability ID --language zh --os windows",
+    "directory add / sync / list；discovery relay add / probe / remove",
+    "channel create --visibility private|public；publish / subscribe / read / unsubscribe / mute",
+    "service inspect / quote / invoke --grant ID --idempotency-key ID / status / cancel / result",
+    "bridge a2a start / stop / status；bridge mcp start / stop",
+    "policy inspect / set；budget inspect；audit export；doctor --network"
+  ],
+  "phases": [
+    {
+      "id": "P0",
+      "name": "冻结协议与集成探针",
+      "depends": [],
+      "effortDays": [
+        2,
+        3
+      ],
+      "layers": [
+        "全部"
+      ],
+      "deliverables": [
+        "现有 27 项 Rust 与 4 节点回归保持",
+        "验证免费发现/中转候选的用途许可、iroh 协议兼容性、限流与失效；找不到生产免费中转则采用直连尽力 + 明确不可达状态",
+        "验证 A2A SDK、Nostr 目标 relay、FTS5 中文/标签检索、schema 签名向量",
+        "固定依赖/协议版本与每模块 feature flag"
+      ],
+      "gate": "明确免费候选及用途证据；不可满足时保留直连/排队降级，不把开发测试公共 relay 当生产保障，不采购付费方案"
+    },
+    {
+      "id": "P1",
+      "name": "身份、能力与安全基线",
+      "depends": [
+        "P0"
+      ],
+      "effortDays": [
+        3,
+        5
+      ],
+      "layers": [
+        "trust",
+        "capabilities",
+        "governance"
+      ],
+      "deliverables": [
+        "OwnerRoot / AgentDelegation / NativeDescriptor",
+        "schema 校验、JCS 新格式签名、版本与 TTL",
+        "陌生请求默认拒绝执行，密钥与资源上限生效"
+      ],
+      "gate": "伪造、重放、换钥、过期、prompt injection、超大输入测试均通过"
+    },
+    {
+      "id": "P2",
+      "name": "本地到公共发现",
+      "depends": [
+        "P1"
+      ],
+      "effortDays": [
+        3,
+        5
+      ],
+      "layers": [
+        "discovery",
+        "trust",
+        "capabilities"
+      ],
+      "deliverables": [
+        "mDNS + 邀请配对",
+        "多源静态目录 + 本地 FTS5",
+        "可选 Nostr 公告及双密钥绑定，公共发布完全 opt-in"
+      ],
+      "gate": "2 个目录失效切换、缓存陈旧标记、2 个独立 relay 探针与无隐私外泄检查通过"
+    },
+    {
+      "id": "P3",
+      "name": "频道与订阅",
+      "depends": [
+        "P2"
+      ],
+      "effortDays": [
+        3,
+        5
+      ],
+      "layers": [
+        "subscriptions",
+        "governance"
+      ],
+      "deliverables": [
+        "私有 publisher ACL + 群复制",
+        "公共签名 feed + 静态托管输出",
+        "游标、断线补齐、静音/取消和本地授权通知"
+      ],
+      "gate": "发布者离线、读者越权、重复通知、缺页和保留窗口测试通过"
+    },
+    {
+      "id": "P4",
+      "name": "跨生态服务协作",
+      "depends": [
+        "P1",
+        "P2"
+      ],
+      "effortDays": [
+        4,
+        7
+      ],
+      "layers": [
+        "collaboration",
+        "capabilities",
+        "trust"
+      ],
+      "deliverables": [
+        "本地 A2A 官方 SDK sidecar 与 Core Job 模型",
+        "MCP 受控适配、凭据引用",
+        "报价/限额/取消/产物摘要/验收，按需 Tunnel 入站"
+      ],
+      "gate": "官方参考 Agent 双向互通，外部完成不跳过本地验收，副作用不盲目重试"
+    },
+    {
+      "id": "P5",
+      "name": "公共网络治理与可靠性",
+      "depends": [
+        "P3",
+        "P4"
+      ],
+      "effortDays": [
+        6,
+        10
+      ],
+      "layers": [
+        "governance",
+        "全部加固"
+      ],
+      "deliverables": [
+        "跨入口统一预算、限流、审计与组织策略",
+        "SSRF/恶意公告/陌生 key 洪泛/循环互聊压测",
+        "签名与撤权恢复、存储配额/清理、分区与失败可解释性",
+        "免费额度耗尽、收费变化、无项目账单凭据及不触发付费回退的故障注入测试"
+      ],
+      "gate": "无授权 side effect 为零；容量/时延有原始报告；全部失败保留可诊断状态"
+    },
+    {
+      "id": "P6",
+      "name": "异网与安装验收",
+      "depends": [
+        "P5"
+      ],
+      "effortDays": [
+        3,
+        5
+      ],
+      "layers": [
+        "全部验收"
+      ],
+      "deliverables": [
+        "真实两台异网设备，尽力直连/获准免费兼容中转、不可达排队、重启与免费 provider 失效",
+        "新协议 16/32/64 容量测试与默认上限复核",
+        "新机器 Skill/bootstrap/密钥保留/回滚；平台支持逐个实测",
+        "仅使用无需项目新增付款的 CI/发行方式；商业签名、公证会员及收费服务不作为默认交付前提，平台警告与支持范围如实说明"
+      ],
+      "gate": "端到端找到服务→校验授权→订阅→委托→交付→验收；停止在生产发布前，未验证平台不声称支持"
+    }
+  ],
+  "estimate": {
+    "engineeringDays": [
+      24,
+      40
+    ],
+    "basis": "单名熟悉项目的工程人员顺序实施的粗估；不是交付承诺，不包含等待账号、异网设备或服务商配合。",
+    "scope": "包含六层首版与本地/异网验收；不含支付清算、统一法律身份、全球信誉平台、通用系统迁移或大规模中央语义索引。"
+  },
+  "infrastructureChoices": [
+    {
+      "component": "原生通信",
+      "default": "现有 iroh P2P",
+      "production": "只采用用途条款允许的免费兼容中转；未核实前不默认配置生产候选，不能用普通免费 TURN/HTTP 代理直接替换 iroh relay",
+      "credentials": "无项目付费凭据或 sponsor 密钥；用户自行添加的服务由用户承担，基本使用不强制购买",
+      "failure": "直连尽力、其他获准免费节点、存活副本补同步；仍失败则待发/提示不可达，绝不自动付款",
+      "source": "iroh-relay"
+    },
+    {
+      "component": "静态目录 / Skill / 公共频道",
+      "default": "现有 Cloudflare Workers Static Assets 或发布者已有 HTTPS CDN",
+      "production": "项目仅承担域名/纯静态托管；不启用计费动态函数、D1/R2/DO 或收费后台索引",
+      "credentials": "发布者持有最小发布权限令牌；读者通常无需账号",
+      "failure": "多镜像 + 已验证本地缓存，标记过期",
+      "source": "cloudflare-static"
+    },
+    {
+      "component": "公开公告",
+      "default": "可选第三方 Nostr relays",
+      "production": "只采用无需项目付费且允许本用途的 relays，探测兼容性/限流/保留；收费或不可用时停用并退回静态目录",
+      "credentials": "单独 Nostr key 与原生 key 绑定，不复用私钥",
+      "failure": "退回静态目录；不把 relay 当权限服务器",
+      "source": "nostr-basics"
+    },
+    {
+      "component": "跨生态入站 HTTP",
+      "default": "关闭；仅本地 A2A sidecar/出站调用",
+      "production": "仅用户已有且明确免费的 HTTPS/Tunnel，核实条款和免费额度；平台不采购，也非基本通信必需",
+      "credentials": "各用户/组织自己持有 Tunnel、OAuth 或 API key",
+      "failure": "仅影响 HTTP 互通，不影响原生网络；本机必须在线",
+      "source": "cloudflare-tunnel"
+    },
+    {
+      "component": "安装产物",
+      "default": "已有安装器与签名清单，准备生产签名/原生 release",
+      "production": "使用适用的免费发行/构建配额；超限暂停，不购买商业签名或超额 CI；不以 Pages 充当商业 SaaS/交易后端",
+      "credentials": "发布密钥与运行凭据分离",
+      "failure": "摘要/版本/签名不符拒绝，保留旧身份和程序",
+      "source": "github-pages-limits"
+    }
+  ],
+  "operationalTradeoffs": [
+    "预算硬约束：项目方只付域名与静态网站托管，不承担中转、模型、服务器、云存储或外部 API 账单。",
+    "n0 默认公共 relays 官方定位为开发测试；不能因为免费就将其当生产保障。当前生产免费兼容候选仍需核实。",
+    "默认直连优先 + 条款允许的免费兼容中转 + 存活副本 + 本地待发；不可达就提示/排队，不自动开通付费服务。",
+    "免费 TURN、HTTP 代理或 Nostr relay 不是 iroh relay 的即插即用替代品；跨协议传输要单独适配和验证，不在计划中假装已具备。",
+    "不运营平台 sponsor relay 或凭据签发后台；用户可自行添加自己的节点/服务，但不作为强制购买项。",
+    "免费服务可限流、停服或改变政策；兼容性、免费资格与用途许可必须有来源和检查时间。不能承诺全球可达、永久免费或 SLA。",
+    "公开发现依靠多来源静态目录/免费公告 + 本地索引，覆盖有限且最终一致；私人消息不上传公共目录。",
+    "无免费存活副本且全员离线时不能保证即时私人送达；不通过新增付费云信箱掩盖此限制。",
+    "已有模型套餐、设备电费与网络由使用者自己承担；AIConnect 不替使用者支付模型或外部服务。收费调用须独立明确授权。"
+  ],
+  "endToEndAcceptance": [
+    "两台已配对的自己的 Agent 通过 LAN 发现，第三个陌生 Agent 不能冒充同 owner 自动加入。",
+    "从公开目录或 Nostr 公告找到只读配置清单服务，验证原始描述符与权限，目录宕机时已验证缓存可解释降级。",
+    "订阅公开更新与私有频道，离线重启补齐；伪造发布、重复事件和撤权后的发布均按规则处理。",
+    "原生与外部官方 A2A 参考 Agent 均跑完委托、进度、取消/交付与本地验收；未授权动作从不执行。",
+    "恶意 schema/公告/重定向/提示注入/陌生 key 洪泛与无限互聊受到统一预算控制。",
+    "两个真正异网设备跑 尽力 P2P/获准免费兼容中转与不可达排队；多 relay、目录、publisher、sidecar 失效均有记录和降级。",
+    "从全新目录运行 bootstrap 可恢复或保留身份，升级不丢既有群与消息，未部署前完成验收报告。",
+    "免费额度耗尽或 provider 收费/下线时，只停用、排队或回退其他免费路径；项目不产生新增非网站账单。"
+  ],
+  "sources": [
+    {
+      "id": "iroh-relay",
+      "title": "iroh: Add a relay — public relays are for development/testing; production shared/dedicated choices",
+      "url": "https://docs.iroh.computer/add-a-relay",
+      "checked": "2026-10-30"
+    },
+    {
+      "id": "a2a-card",
+      "title": "A2A Agent Card 与服务发现/认证/任务语义",
+      "url": "https://a2a-protocol.org/dev/specification/agent-card/",
+      "checked": "2026-10-30"
+    },
+    {
+      "id": "a2a-sdk",
+      "title": "官方 @a2a-js/sdk（调研时支持 v1.0）",
+      "url": "https://github.com/a2aproject/a2a-js",
+      "checked": "2026-10-30"
+    },
+    {
+      "id": "mdns",
+      "title": "RFC 6763 DNS-Based Service Discovery",
+      "url": "https://www.rfc-editor.org/info/rfc6763/",
+      "checked": "2026-10-30"
+    },
+    {
+      "id": "nostr-basics",
+      "title": "NIP-01: 事件、secp256k1 签名和 relay 协议",
+      "url": "https://github.com/nostr-protocol/nips/blob/master/01.md",
+      "checked": "2026-10-30"
+    },
+    {
+      "id": "nostr-relays",
+      "title": "NIP-65 relay list metadata",
+      "url": "https://github.com/nostr-protocol/nips/blob/master/65.md",
+      "checked": "2026-10-30"
+    },
+    {
+      "id": "nostr-service",
+      "title": "NIP-11 relay information 与服务限制",
+      "url": "https://github.com/nostr-protocol/nips/blob/master/11.md",
+      "checked": "2026-10-30"
+    },
+    {
+      "id": "nostr-app",
+      "title": "NIP-78 应用数据",
+      "url": "https://github.com/nostr-protocol/nips/blob/master/78.md",
+      "checked": "2026-10-30"
+    },
+    {
+      "id": "atom",
+      "title": "RFC 4287 Atom Syndication Format",
+      "url": "https://www.rfc-editor.org/info/rfc4287/",
+      "checked": "2026-10-30"
+    },
+    {
+      "id": "websub",
+      "title": "W3C WebSub；hub 与可达 callback",
+      "url": "https://www.w3.org/TR/websub/",
+      "checked": "2026-10-30"
+    },
+    {
+      "id": "mcp-registry",
+      "title": "官方 MCP Registry API（面向 MCP server，不是所有 Agent 的全球目录）",
+      "url": "https://github.com/modelcontextprotocol/registry/blob/main/docs/reference/api/official-registry-api.md",
+      "checked": "2026-10-30"
+    },
+    {
+      "id": "cloudflare-static",
+      "title": "Workers Static Assets billing and limitations",
+      "url": "https://developers.cloudflare.com/workers/static-assets/billing-and-limitations/",
+      "checked": "2026-10-30"
+    },
+    {
+      "id": "cloudflare-tunnel",
+      "title": "Cloudflare Tunnel：把本地服务映射至公网 hostname",
+      "url": "https://developers.cloudflare.com/tunnel/get-started/",
+      "checked": "2026-10-30"
+    },
+    {
+      "id": "github-pages-limits",
+      "title": "GitHub Pages 限额及商业用途限制",
+      "url": "https://docs.github.com/en/pages/getting-started-with-github-pages/github-pages-limits",
+      "checked": "2026-10-30"
+    },
+    {
+      "id": "schema",
+      "title": "JSON Schema 2020-12",
+      "url": "https://json-schema.org/draft/2020-12",
+      "checked": "2026-10-30"
+    },
+    {
+      "id": "jcs",
+      "title": "RFC 8785 JSON Canonicalization Scheme",
+      "url": "https://www.rfc-editor.org/info/rfc8785/",
+      "checked": "2026-10-30"
+    },
+    {
+      "id": "rust-libraries",
+      "title": "Rust 实现候选 mdns-sd / feed-rs / jsonschema / nostr-sdk",
+      "urls": [
+        "https://docs.rs/mdns-sd/latest/mdns_sd/",
+        "https://docs.rs/feed-rs/latest/feed_rs/",
+        "https://docs.rs/jsonschema/latest/jsonschema/",
+        "https://docs.rs/nostr-sdk/latest/nostr_sdk/"
+      ],
+      "checked": "2026-10-30"
+    },
+    {
+      "id": "iroh-free-limits",
+      "title": "iroh 免费 Community：限流、无在线保证；不代表生产使用许可",
+      "url": "https://www.iroh.computer/pricing",
+      "checked": "2026-10-30"
+    }
+  ],
+  "budgetPolicy": {
+    "status": "用户硬约束；须在后续实现中强制执行，本轮只修订计划",
+    "projectPaysOnly": [
+      "网站域名",
+      "纯静态网站托管"
+    ],
+    "projectDoesNotPay": [
+      "托管中转订阅/超额流量",
+      "中央服务器/凭据签发服务",
+      "模型与外部付费工具",
+      "云消息存储/数据库",
+      "付费日志监控/超额 CI/商业代码签名"
+    ],
+    "defaultProviderPolicy": "free-only，符合服务商用途与限流；额度耗尽或开始收费时停用",
+    "automaticPaidFallback": false,
+    "sponsoredCredentials": false,
+    "optionalUserServices": "仅由用户自行选择、自带和承担；不作为默认安装或基本通信的强制购买项",
+    "fallbackOrder": [
+      "尝试原生直连",
+      "尝试明确允许本用途且协议兼容的免费中转",
+      "从存活副本补同步/保留本地待发",
+      "显示不可达并排队，不自动开通付费服务"
+    ],
+    "relayStatus": "尚无已验证满足生产用途的免费兼容中转名单；n0 默认公共中转保留为开发测试，不因免费就当作生产保障",
+    "scope": "项目新增第三方基础设施账单；已有 Agent 模型套餐、设备、电费和网络属于各使用者自身成本"
+  }
+}

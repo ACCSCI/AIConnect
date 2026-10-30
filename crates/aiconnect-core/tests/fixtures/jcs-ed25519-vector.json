@@ -1,0 +1,19 @@
+{
+  "purpose": "Deterministic interoperability test ONLY; seed must never be used for real identity",
+  "seedHex": "0707070707070707070707070707070707070707070707070707070707070707",
+  "publicKey": "ea4a6c63e29c520abef5507b132ec5f9954776aebebe7b92421eea691446d22c",
+  "payload": {
+    "a": "中文",
+    "agentId": "ea4a6c63e29c520abef5507b132ec5f9954776aebebe7b92421eea691446d22c",
+    "issuedAt": 1700000000000,
+    "n": 1e-7,
+    "schemaVersion": 1,
+    "z": [
+      true,
+      null,
+      1.5
+    ]
+  },
+  "canonical": "{\"a\":\"中文\",\"agentId\":\"ea4a6c63e29c520abef5507b132ec5f9954776aebebe7b92421eea691446d22c\",\"issuedAt\":1700000000000,\"n\":1e-7,\"schemaVersion\":1,\"z\":[true,null,1.5]}",
+  "signature": "C9lBf-u_2c3TH9Ih9B8wgX7mKxxjyed7HTQX5mK8bUDQVa8kiTn2yY-TmQcETwP8AfJK9hz3wDybWh4rRC3QCw"
+}

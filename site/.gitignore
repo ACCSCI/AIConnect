@@ -1,0 +1,8 @@
+node_modules/
+.wrangler/
+.local/
+public/install.ps1
+public/install.sh
+public/install.mjs
+public/.well-known/skills/aiconnect/scripts/
+public/releases/

@@ -1,0 +1,39 @@
+{
+  "name": "aiconnect",
+  "private": true,
+  "version": "0.2.0",
+  "type": "module",
+  "bin": {
+    "aiconnect": "bin/aiconnect.mjs"
+  },
+  "engines": {
+    "node": ">=24.0.0"
+  },
+  "files": [
+    "bin",
+    "runtime",
+    "server.mjs",
+    "index.html",
+    "app.js",
+    "styles.css",
+    "local.html",
+    "local.js",
+    "README.md"
+  ],
+  "scripts": {
+    "verify:local": "node scripts/verify-local.mjs",
+    "verify:agents": "node scripts/verify-local.mjs --agents",
+    "dev": "node server.mjs",
+    "start": "node server.mjs",
+    "daemon": "node bin/aiconnect.mjs daemon",
+    "test": "node --test test/*.test.mjs",
+    "check": "node --check app.js && node --check local.js && node --check runtime/peer.mjs && node --check runtime/daemon.mjs && node --check bin/aiconnect.mjs",
+    "bench:groups": "node lab/group-pressure.mjs",
+    "test:replication": "node lab/group-replication.mjs",
+    "test:six-layers": "node lab/six-layer-acceptance.mjs",
+    "test:interop": "node --test adapters/interop/test/interop.test.mjs"
+  },
+  "dependencies": {
+    "@number0/iroh": "1.2.0"
+  }
+}

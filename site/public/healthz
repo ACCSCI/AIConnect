@@ -1,0 +1,1 @@
+{"ok":true,"service":"aiconnect-distribution","staticAsset":true,"chatRelay":false,"accountDatabase":false,"dynamicWorker":false,"releaseChannel":"local-development","meaning":"Static distribution marker only; does not probe Agent or network availability."}

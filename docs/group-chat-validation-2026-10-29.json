@@ -1,0 +1,181 @@
+{
+  "date": "2026-10-29",
+  "feature": "Multi-Agent group chat v1",
+  "binary": {
+    "path": "target/debug/aiconnect.exe",
+    "sha256": "21124dfacdb2fdd56f39fa33d5826102a8f274a39e7a4d3b2ca45e743175a2be"
+  },
+  "limits": {
+    "maximumMembers": 16,
+    "onlineOwnerRequired": true,
+    "automaticGroupTaskExecution": false,
+    "ownerTransfer": false,
+    "localLogicalIsolationOnly": true,
+    "productionDeploymentPerformed": false
+  },
+  "coreGroupTests": 3,
+  "regression": {
+    "startedAt": "2026-10-29T14:49:33.681Z",
+    "scope": "Local verification only; no deployment or publication",
+    "realAgents": false,
+    "checks": [
+      {
+        "name": "Rust workspace tests",
+        "status": "passed",
+        "elapsedMs": 49551
+      },
+      {
+        "name": "Native CLI build",
+        "status": "passed",
+        "elapsedMs": 14059
+      },
+      {
+        "name": "Agent adapter tests",
+        "status": "passed",
+        "elapsedMs": 4553
+      },
+      {
+        "name": "Mini-environment harness tests",
+        "status": "passed",
+        "elapsedMs": 884
+      },
+      {
+        "name": "Signed installer tests",
+        "status": "passed",
+        "elapsedMs": 7774
+      },
+      {
+        "name": "Native blackbox acceptance",
+        "status": "passed",
+        "elapsedMs": 31720
+      },
+      {
+        "name": "Native IPC adversarial tests",
+        "status": "passed",
+        "elapsedMs": 1600
+      },
+      {
+        "name": "Native runtime policy tests",
+        "status": "passed",
+        "elapsedMs": 13619
+      },
+      {
+        "name": "Task confirmation native CLI",
+        "status": "passed",
+        "elapsedMs": 6558
+      },
+      {
+        "name": "Group chat native nodes",
+        "status": "passed",
+        "elapsedMs": 11359
+      },
+      {
+        "name": "Group chat relay transport",
+        "status": "passed",
+        "elapsedMs": 58696
+      },
+      {
+        "name": "Native forced relay transport",
+        "status": "passed",
+        "elapsedMs": 17805
+      },
+      {
+        "name": "Workers local route tests",
+        "status": "passed",
+        "elapsedMs": 499
+      },
+      {
+        "name": "Workers real local HTTP",
+        "status": "passed",
+        "elapsedMs": 3659
+      }
+    ],
+    "finishedAt": "2026-10-29T14:53:16.022Z",
+    "passed": true
+  },
+  "realAgents": {
+    "path": ".local/group-chat/2026-10-29T14-50-53-804Z-60fd6a/report.json",
+    "report": {
+      "startedAt": "2026-10-29T14:50:53.815Z",
+      "passed": true,
+      "realAgents": true,
+      "relayOnly": false,
+      "checks": [
+        "three native nodes explicitly join bound group invitations",
+        "member fanout is durable, deduplicated and never grants execution",
+        "group roles, mute and protected owner enforced remotely",
+        "three real Agents announce and read each other through the group",
+        "removed member cannot use old invitation; restart retains group history"
+      ],
+      "scope": "Same-host independent native profiles and workspaces; not an OS sandbox or WAN NAT test",
+      "routing": "Direct member fan-out; owner coordinates current membership authorization, website not involved",
+      "observedPath": {
+        "direct": true,
+        "peerId": "d7f83a47cf03b39932dab2068038f6bccb2199ee0b91b87104ec9f417b04cf00",
+        "relay": false
+      },
+      "agents": [
+        {
+          "status": "completed",
+          "tools": 3
+        },
+        {
+          "status": "completed",
+          "tools": 3
+        },
+        {
+          "status": "completed",
+          "tools": 3
+        }
+      ],
+      "finishedAt": "2026-10-29T14:52:06.945Z"
+    }
+  },
+  "nativeWatch": {
+    "path": ".local/group-chat/2026-10-29T14-56-06-692Z-ea270d/report.json",
+    "report": {
+      "startedAt": "2026-10-29T14:56:06.702Z",
+      "passed": true,
+      "realAgents": false,
+      "relayOnly": false,
+      "checks": [
+        "three native nodes explicitly join bound group invitations",
+        "member fanout is durable, deduplicated and never grants execution",
+        "group inbox watch resumes a cursor and streams new messages",
+        "group roles, mute and protected owner enforced remotely",
+        "removed member cannot use old invitation; restart retains group history"
+      ],
+      "scope": "Same-host independent native profiles and workspaces; not an OS sandbox or WAN NAT test",
+      "routing": "Direct member fan-out; owner coordinates current membership authorization, website not involved",
+      "observedPath": {
+        "direct": true,
+        "peerId": "947f347968629b29c63e88b6608535a146f2a4333c433b1a6b745f22b37ac359",
+        "relay": false
+      },
+      "finishedAt": "2026-10-29T14:56:20.305Z"
+    }
+  },
+  "relay": {
+    "path": ".local/group-chat/2026-10-29T14-51-55-497Z-bd97f6/report.json",
+    "report": {
+      "startedAt": "2026-10-29T14:51:55.505Z",
+      "passed": true,
+      "realAgents": false,
+      "relayOnly": true,
+      "checks": [
+        "three native nodes explicitly join bound group invitations",
+        "member fanout is durable, deduplicated and never grants execution",
+        "group roles, mute and protected owner enforced remotely",
+        "removed member cannot use old invitation; restart retains group history"
+      ],
+      "scope": "Same-host independent native profiles and workspaces; not an OS sandbox or WAN NAT test",
+      "routing": "Direct member fan-out; owner coordinates current membership authorization, website not involved",
+      "observedPath": {
+        "direct": false,
+        "peerId": "0bdcfbe831f9c359f1c0c86846679e88a4cf1b849a65821b0ee9d86101b08837",
+        "relay": true
+      },
+      "finishedAt": "2026-10-29T14:52:54.037Z"
+    }
+  }
+}

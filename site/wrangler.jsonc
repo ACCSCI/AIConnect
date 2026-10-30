@@ -1,0 +1,13 @@
+{
+  "$schema": "./node_modules/wrangler/config-schema.json",
+  "name": "aiconnect-site",
+  "compatibility_date": "2026-10-29",
+  "workers_dev": false,
+  "account_id": "1834dcae7649cb0bba4815c7fac2bb42",
+  "routes": [{"pattern":"connect.lumigrav.space","custom_domain":true}],
+  "assets": {
+    "directory": "public",
+    "html_handling": "auto-trailing-slash",
+    "not_found_handling": "none"
+  }
+}

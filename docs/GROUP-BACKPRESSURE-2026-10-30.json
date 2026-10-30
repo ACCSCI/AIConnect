@@ -1,0 +1,874 @@
+{
+  "date": "2026-10-30",
+  "scope": "Local native direct-only simulated nodes; not WAN capacity; no deployment",
+  "defaultMembers": 16,
+  "verification": {
+    "rustTests": 22,
+    "groupDirect": true,
+    "groupRelay": true,
+    "signedInstallerTests": 2,
+    "notes": "Installer verification overlapped the early 16-node phase of confirmation round; primary round ran without installer overlap."
+  },
+  "runs": [
+    {
+      "path": ".local/group-pressure/run-lUwnZp/summary.json",
+      "binary": {
+        "path": "D:\\Projects\\AIConnect\\target\\release\\aiconnect.exe",
+        "sha256": "d8d665a551f35e5971aeaf8d13d311c5b1f797e1622c182f9a31fa56ca08d08d"
+      },
+      "startedAt": "2026-10-29T16:03:52.774Z",
+      "finishedAt": "2026-10-29T16:05:15.936Z",
+      "definitions": {
+        "latency": "requestLatency=IPC send wall time; completionLatency=all-recipient durable ACK, including retries, observed from sender outbox read-only at 100ms resolution; warmup drained first",
+        "deliveryRate": "Recipient histories read independently; sender local copy excluded. deliveryRate includes failed intents; acceptedDeliveryRate includes only messages with a real persisted fanout outbox",
+        "memory": "Sampled every 2.5s: sum native private committed bytes plus working sets; summed working sets may double-count shared pages; harness memory separate"
+      },
+      "cases": [
+        {
+          "nodes": 16,
+          "passed": true,
+          "admission": {
+            "members": 16,
+            "joinLatency": {
+              "samples": 15,
+              "minMs": 22.703099999999722,
+              "p50Ms": 25.3125,
+              "p95Ms": 28.552599999999984,
+              "maxMs": 28.552599999999984
+            },
+            "snapshotRawBytes": 6733
+          },
+          "workload": {
+            "steady": 16,
+            "burst": 8,
+            "concurrentSenders": 4,
+            "payloadBytes": 256,
+            "tokioWorkersPerNode": 2
+          },
+          "steady": {
+            "requestLatency": {
+              "samples": 16,
+              "minMs": 198.39470000000074,
+              "p50Ms": 216.16250000000036,
+              "p95Ms": 231.53340000000026,
+              "maxMs": 231.53340000000026
+            },
+            "allAckLatency": {
+              "samples": 16,
+              "minMs": 198.39470000000074,
+              "p50Ms": 216.16250000000036,
+              "p95Ms": 231.53340000000026,
+              "maxMs": 231.53340000000026
+            },
+            "initialAckRate": 1,
+            "requestErrors": 0,
+            "attemptedMessages": 16,
+            "acceptedMessages": 16,
+            "expectedDeliveries": 240,
+            "receivedDeliveries": 240,
+            "deliveryRate": 1,
+            "acceptedDeliveryRate": 1,
+            "completionLatency": {
+              "samples": 16,
+              "minMs": 198.39470000000074,
+              "p50Ms": 216.16250000000036,
+              "p95Ms": 231.53340000000026,
+              "maxMs": 231.53340000000026
+            },
+            "fullAckPending": 0,
+            "drainMs": 16.971199999999953
+          },
+          "burst": {
+            "requestLatency": {
+              "samples": 8,
+              "minMs": 253.34519999999975,
+              "p50Ms": 284.1618000000017,
+              "p95Ms": 303.8883000000005,
+              "maxMs": 303.8883000000005
+            },
+            "allAckLatency": {
+              "samples": 8,
+              "minMs": 253.34519999999975,
+              "p50Ms": 284.1618000000017,
+              "p95Ms": 303.8883000000005,
+              "maxMs": 303.8883000000005
+            },
+            "initialAckRate": 1,
+            "requestErrors": 0,
+            "attemptedMessages": 8,
+            "acceptedMessages": 8,
+            "expectedDeliveries": 120,
+            "receivedDeliveries": 120,
+            "deliveryRate": 1,
+            "acceptedDeliveryRate": 1,
+            "completionLatency": {
+              "samples": 8,
+              "minMs": 253.34519999999975,
+              "p50Ms": 284.1618000000017,
+              "p95Ms": 303.8883000000005,
+              "maxMs": 303.8883000000005
+            },
+            "fullAckPending": 0,
+            "drainMs": 21.533699999999953
+          },
+          "memory": {
+            "peakPrivateBytes": 133009408,
+            "peakWorkingSetBytes": 433188864,
+            "peakOwnerPrivateBytes": 9056256,
+            "maxNodePrivateBytes": 9641984,
+            "minFreeBytes": 7905693696
+          },
+          "ownerOffline": {
+            "attempts": [
+              {
+                "sender": 3,
+                "id": "11cea3e0-79bb-46af-9a09-d94928441df1",
+                "ms": 8016.236299999999,
+                "error": "peer_unreachable"
+              },
+              {
+                "sender": 2,
+                "id": "285513f0-c523-4c81-8c1e-8f71d7a98fdd",
+                "ms": 8017.074899999998,
+                "error": "peer_unreachable"
+              },
+              {
+                "sender": 1,
+                "id": "b78a6c5d-0d6a-4b3a-a352-6aae7d76a18c",
+                "ms": 8017.8349,
+                "error": "peer_unreachable"
+              }
+            ],
+            "allRejected": true,
+            "persistedOfflineAttempts": 0
+          },
+          "ownerRecovery": {
+            "attemptedMessages": 1,
+            "acceptedMessages": 1,
+            "expectedDeliveries": 15,
+            "receivedDeliveries": 15,
+            "deliveryRate": 1,
+            "acceptedDeliveryRate": 1,
+            "completionLatency": {
+              "samples": 1,
+              "minMs": 245.66259999999966,
+              "p50Ms": 245.66259999999966,
+              "p95Ms": 245.66259999999966,
+              "maxMs": 245.66259999999966
+            },
+            "fullAckPending": 0,
+            "drainMs": 17.086299999999028,
+            "requestMs": 245.66259999999966,
+            "restoredMembers": 16
+          }
+        },
+        {
+          "nodes": 32,
+          "passed": true,
+          "admission": {
+            "members": 32,
+            "joinLatency": {
+              "samples": 31,
+              "minMs": 20.711999999999534,
+              "p50Ms": 24.451600000000326,
+              "p95Ms": 27.79820000000109,
+              "maxMs": 29.177700000000186
+            },
+            "snapshotRawBytes": 13213
+          },
+          "workload": {
+            "steady": 16,
+            "burst": 8,
+            "concurrentSenders": 4,
+            "payloadBytes": 256,
+            "tokioWorkersPerNode": 2
+          },
+          "steady": {
+            "requestLatency": {
+              "samples": 16,
+              "minMs": 188.02179999999498,
+              "p50Ms": 236.59449999999924,
+              "p95Ms": 252.05869999999413,
+              "maxMs": 252.05869999999413
+            },
+            "allAckLatency": {
+              "samples": 16,
+              "minMs": 188.02179999999498,
+              "p50Ms": 236.59449999999924,
+              "p95Ms": 252.05869999999413,
+              "maxMs": 252.05869999999413
+            },
+            "initialAckRate": 1,
+            "requestErrors": 0,
+            "attemptedMessages": 16,
+            "acceptedMessages": 16,
+            "expectedDeliveries": 496,
+            "receivedDeliveries": 496,
+            "deliveryRate": 1,
+            "acceptedDeliveryRate": 1,
+            "completionLatency": {
+              "samples": 16,
+              "minMs": 188.02179999999498,
+              "p50Ms": 236.59449999999924,
+              "p95Ms": 252.05869999999413,
+              "maxMs": 252.05869999999413
+            },
+            "fullAckPending": 0,
+            "drainMs": 35.95539999999892
+          },
+          "burst": {
+            "requestLatency": {
+              "samples": 8,
+              "minMs": 287.04089999999997,
+              "p50Ms": 305.67979999999807,
+              "p95Ms": 373.9714000000022,
+              "maxMs": 373.9714000000022
+            },
+            "allAckLatency": {
+              "samples": 7,
+              "minMs": 287.04089999999997,
+              "p50Ms": 323.1490000000049,
+              "p95Ms": 373.9714000000022,
+              "maxMs": 373.9714000000022
+            },
+            "initialAckRate": 0.9959677419354839,
+            "requestErrors": 0,
+            "attemptedMessages": 8,
+            "acceptedMessages": 8,
+            "expectedDeliveries": 248,
+            "receivedDeliveries": 248,
+            "deliveryRate": 1,
+            "acceptedDeliveryRate": 1,
+            "completionLatency": {
+              "samples": 8,
+              "minMs": 287.04089999999997,
+              "p50Ms": 305.8568000000014,
+              "p95Ms": 373.9714000000022,
+              "maxMs": 373.9714000000022
+            },
+            "fullAckPending": 0,
+            "drainMs": 34.208599999998114
+          },
+          "memory": {
+            "peakPrivateBytes": 276398080,
+            "peakWorkingSetBytes": 873013248,
+            "peakOwnerPrivateBytes": 12075008,
+            "maxNodePrivateBytes": 14299136,
+            "minFreeBytes": 7438512128
+          },
+          "ownerOffline": {
+            "attempts": [
+              {
+                "sender": 3,
+                "id": "3f462df0-d311-4451-b443-7f5ab3673f50",
+                "ms": 8011.054100000001,
+                "error": "peer_unreachable"
+              },
+              {
+                "sender": 2,
+                "id": "c3edaf73-bfa9-4f78-8e6a-78e3f8a27aeb",
+                "ms": 8011.383799999996,
+                "error": "peer_unreachable"
+              },
+              {
+                "sender": 1,
+                "id": "d1fff20b-9089-4644-8432-254046b04e52",
+                "ms": 8011.818299999999,
+                "error": "peer_unreachable"
+              }
+            ],
+            "allRejected": true,
+            "persistedOfflineAttempts": 0
+          },
+          "ownerRecovery": {
+            "attemptedMessages": 1,
+            "acceptedMessages": 1,
+            "expectedDeliveries": 31,
+            "receivedDeliveries": 31,
+            "deliveryRate": 1,
+            "acceptedDeliveryRate": 1,
+            "completionLatency": {
+              "samples": 1,
+              "minMs": 253.35659999999916,
+              "p50Ms": 253.35659999999916,
+              "p95Ms": 253.35659999999916,
+              "maxMs": 253.35659999999916
+            },
+            "fullAckPending": 0,
+            "drainMs": 35.274499999999534,
+            "requestMs": 253.35659999999916,
+            "restoredMembers": 32
+          }
+        },
+        {
+          "nodes": 64,
+          "passed": true,
+          "admission": {
+            "members": 64,
+            "joinLatency": {
+              "samples": 63,
+              "minMs": 14.203999999997905,
+              "p50Ms": 16.425900000002002,
+              "p95Ms": 18.899899999996705,
+              "maxMs": 19.164199999999255
+            },
+            "snapshotRawBytes": 26173
+          },
+          "workload": {
+            "steady": 16,
+            "burst": 8,
+            "concurrentSenders": 4,
+            "payloadBytes": 256,
+            "tokioWorkersPerNode": 2
+          },
+          "steady": {
+            "requestLatency": {
+              "samples": 16,
+              "minMs": 511.881100000006,
+              "p50Ms": 543.2724999999919,
+              "p95Ms": 568.8967999999877,
+              "maxMs": 568.8967999999877
+            },
+            "allAckLatency": {
+              "samples": 16,
+              "minMs": 511.881100000006,
+              "p50Ms": 543.2724999999919,
+              "p95Ms": 568.8967999999877,
+              "maxMs": 568.8967999999877
+            },
+            "initialAckRate": 1,
+            "requestErrors": 0,
+            "attemptedMessages": 16,
+            "acceptedMessages": 16,
+            "expectedDeliveries": 1008,
+            "receivedDeliveries": 1008,
+            "deliveryRate": 1,
+            "acceptedDeliveryRate": 1,
+            "completionLatency": {
+              "samples": 16,
+              "minMs": 511.881100000006,
+              "p50Ms": 543.2724999999919,
+              "p95Ms": 568.8967999999877,
+              "maxMs": 568.8967999999877
+            },
+            "fullAckPending": 0,
+            "drainMs": 68.94030000000203
+          },
+          "burst": {
+            "requestLatency": {
+              "samples": 8,
+              "minMs": 831.4130999999907,
+              "p50Ms": 859.1337000000058,
+              "p95Ms": 944.5899999999965,
+              "maxMs": 944.5899999999965
+            },
+            "allAckLatency": {
+              "samples": 8,
+              "minMs": 831.4130999999907,
+              "p50Ms": 859.1337000000058,
+              "p95Ms": 944.5899999999965,
+              "maxMs": 944.5899999999965
+            },
+            "initialAckRate": 1,
+            "requestErrors": 0,
+            "attemptedMessages": 8,
+            "acceptedMessages": 8,
+            "expectedDeliveries": 504,
+            "receivedDeliveries": 504,
+            "deliveryRate": 1,
+            "acceptedDeliveryRate": 1,
+            "completionLatency": {
+              "samples": 8,
+              "minMs": 831.4130999999907,
+              "p50Ms": 859.1337000000058,
+              "p95Ms": 944.5899999999965,
+              "maxMs": 944.5899999999965
+            },
+            "fullAckPending": 0,
+            "drainMs": 56.853999999992084
+          },
+          "memory": {
+            "peakPrivateBytes": 480956416,
+            "peakWorkingSetBytes": 1706532864,
+            "peakOwnerPrivateBytes": 17559552,
+            "maxNodePrivateBytes": 17559552,
+            "minFreeBytes": 7292264448
+          },
+          "ownerOffline": {
+            "attempts": [
+              {
+                "sender": 2,
+                "id": "0f442cbd-ab90-4007-8b3d-f3d26d005481",
+                "ms": 8019.214800000002,
+                "error": "peer_unreachable"
+              },
+              {
+                "sender": 3,
+                "id": "c55680bb-9dbb-4892-960c-0469e0cacf83",
+                "ms": 8019.717300000004,
+                "error": "peer_unreachable"
+              },
+              {
+                "sender": 1,
+                "id": "39ddbdd7-58d6-48b0-bc85-21bea6d314f1",
+                "ms": 8020.15830000001,
+                "error": "peer_unreachable"
+              }
+            ],
+            "allRejected": true,
+            "persistedOfflineAttempts": 0
+          },
+          "ownerRecovery": {
+            "attemptedMessages": 1,
+            "acceptedMessages": 1,
+            "expectedDeliveries": 63,
+            "receivedDeliveries": 63,
+            "deliveryRate": 1,
+            "acceptedDeliveryRate": 1,
+            "completionLatency": {
+              "samples": 1,
+              "minMs": 634.6597000000038,
+              "p50Ms": 634.6597000000038,
+              "p95Ms": 634.6597000000038,
+              "maxMs": 634.6597000000038
+            },
+            "fullAckPending": 0,
+            "drainMs": 62.26879999999073,
+            "requestMs": 634.6597000000038,
+            "restoredMembers": 64
+          }
+        }
+      ]
+    },
+    {
+      "path": ".local/group-pressure/run-Ox7s1l/summary.json",
+      "binary": {
+        "path": "D:\\Projects\\AIConnect\\target\\release\\aiconnect.exe",
+        "sha256": "d8d665a551f35e5971aeaf8d13d311c5b1f797e1622c182f9a31fa56ca08d08d"
+      },
+      "startedAt": "2026-10-29T16:05:39.237Z",
+      "finishedAt": "2026-10-29T16:07:03.477Z",
+      "definitions": {
+        "latency": "requestLatency=IPC send wall time; completionLatency=all-recipient durable ACK, including retries, observed from sender outbox read-only at 100ms resolution; warmup drained first",
+        "deliveryRate": "Recipient histories read independently; sender local copy excluded. deliveryRate includes failed intents; acceptedDeliveryRate includes only messages with a real persisted fanout outbox",
+        "memory": "Sampled every 2.5s: sum native private committed bytes plus working sets; summed working sets may double-count shared pages; harness memory separate"
+      },
+      "cases": [
+        {
+          "nodes": 16,
+          "passed": true,
+          "admission": {
+            "members": 16,
+            "joinLatency": {
+              "samples": 15,
+              "minMs": 21.929399999999987,
+              "p50Ms": 24.26719999999932,
+              "p95Ms": 27.090400000000045,
+              "maxMs": 27.090400000000045
+            },
+            "snapshotRawBytes": 6733
+          },
+          "workload": {
+            "steady": 16,
+            "burst": 8,
+            "concurrentSenders": 4,
+            "payloadBytes": 256,
+            "tokioWorkersPerNode": 2
+          },
+          "steady": {
+            "requestLatency": {
+              "samples": 16,
+              "minMs": 114.54069999999956,
+              "p50Ms": 217.91150000000016,
+              "p95Ms": 227.29110000000037,
+              "maxMs": 227.29110000000037
+            },
+            "allAckLatency": {
+              "samples": 16,
+              "minMs": 114.54069999999956,
+              "p50Ms": 217.91150000000016,
+              "p95Ms": 227.29110000000037,
+              "maxMs": 227.29110000000037
+            },
+            "initialAckRate": 1,
+            "requestErrors": 0,
+            "attemptedMessages": 16,
+            "acceptedMessages": 16,
+            "expectedDeliveries": 240,
+            "receivedDeliveries": 240,
+            "deliveryRate": 1,
+            "acceptedDeliveryRate": 1,
+            "completionLatency": {
+              "samples": 16,
+              "minMs": 114.54069999999956,
+              "p50Ms": 217.91150000000016,
+              "p95Ms": 227.29110000000037,
+              "maxMs": 227.29110000000037
+            },
+            "fullAckPending": 0,
+            "drainMs": 17.525700000000143
+          },
+          "burst": {
+            "requestLatency": {
+              "samples": 8,
+              "minMs": 131.76350000000093,
+              "p50Ms": 144.58279999999831,
+              "p95Ms": 180.91250000000036,
+              "maxMs": 180.91250000000036
+            },
+            "allAckLatency": {
+              "samples": 8,
+              "minMs": 131.76350000000093,
+              "p50Ms": 144.58279999999831,
+              "p95Ms": 180.91250000000036,
+              "maxMs": 180.91250000000036
+            },
+            "initialAckRate": 1,
+            "requestErrors": 0,
+            "attemptedMessages": 8,
+            "acceptedMessages": 8,
+            "expectedDeliveries": 120,
+            "receivedDeliveries": 120,
+            "deliveryRate": 1,
+            "acceptedDeliveryRate": 1,
+            "completionLatency": {
+              "samples": 8,
+              "minMs": 131.76350000000093,
+              "p50Ms": 144.58279999999831,
+              "p95Ms": 180.91250000000036,
+              "maxMs": 180.91250000000036
+            },
+            "fullAckPending": 0,
+            "drainMs": 28.60059999999976
+          },
+          "memory": {
+            "peakPrivateBytes": 130592768,
+            "peakWorkingSetBytes": 432558080,
+            "peakOwnerPrivateBytes": 7979008,
+            "maxNodePrivateBytes": 10215424,
+            "minFreeBytes": 6475091968
+          },
+          "ownerOffline": {
+            "attempts": [
+              {
+                "sender": 1,
+                "id": "a2dba7db-54fc-4215-bc5b-481f9611f6e3",
+                "ms": 8016.056900000001,
+                "error": "peer_unreachable"
+              },
+              {
+                "sender": 3,
+                "id": "cc6a2762-0ed3-41de-9eb8-8ffbd525fd85",
+                "ms": 8016.225999999999,
+                "error": "peer_unreachable"
+              },
+              {
+                "sender": 2,
+                "id": "2fb5560c-d74c-4ace-a28e-f9c43b460a69",
+                "ms": 8016.4858,
+                "error": "peer_unreachable"
+              }
+            ],
+            "allRejected": true,
+            "persistedOfflineAttempts": 0
+          },
+          "ownerRecovery": {
+            "attemptedMessages": 1,
+            "acceptedMessages": 1,
+            "expectedDeliveries": 15,
+            "receivedDeliveries": 15,
+            "deliveryRate": 1,
+            "acceptedDeliveryRate": 1,
+            "completionLatency": {
+              "samples": 1,
+              "minMs": 132.17109999999957,
+              "p50Ms": 132.17109999999957,
+              "p95Ms": 132.17109999999957,
+              "maxMs": 132.17109999999957
+            },
+            "fullAckPending": 0,
+            "drainMs": 23.151200000000244,
+            "requestMs": 132.17109999999957,
+            "restoredMembers": 16
+          }
+        },
+        {
+          "nodes": 32,
+          "passed": true,
+          "admission": {
+            "members": 32,
+            "joinLatency": {
+              "samples": 31,
+              "minMs": 22.60030000000188,
+              "p50Ms": 25.36279999999897,
+              "p95Ms": 30.248900000002322,
+              "maxMs": 71.77109999999811
+            },
+            "snapshotRawBytes": 13213
+          },
+          "workload": {
+            "steady": 16,
+            "burst": 8,
+            "concurrentSenders": 4,
+            "payloadBytes": 256,
+            "tokioWorkersPerNode": 2
+          },
+          "steady": {
+            "requestLatency": {
+              "samples": 16,
+              "minMs": 225.24429999999847,
+              "p50Ms": 267.2988999999943,
+              "p95Ms": 291.6489999999976,
+              "maxMs": 291.6489999999976
+            },
+            "allAckLatency": {
+              "samples": 16,
+              "minMs": 225.24429999999847,
+              "p50Ms": 267.2988999999943,
+              "p95Ms": 291.6489999999976,
+              "maxMs": 291.6489999999976
+            },
+            "initialAckRate": 1,
+            "requestErrors": 0,
+            "attemptedMessages": 16,
+            "acceptedMessages": 16,
+            "expectedDeliveries": 496,
+            "receivedDeliveries": 496,
+            "deliveryRate": 1,
+            "acceptedDeliveryRate": 1,
+            "completionLatency": {
+              "samples": 16,
+              "minMs": 225.24429999999847,
+              "p50Ms": 267.2988999999943,
+              "p95Ms": 291.6489999999976,
+              "maxMs": 291.6489999999976
+            },
+            "fullAckPending": 0,
+            "drainMs": 43.46089999999822
+          },
+          "burst": {
+            "requestLatency": {
+              "samples": 8,
+              "minMs": 314.3957999999984,
+              "p50Ms": 332.0535999999993,
+              "p95Ms": 365.9372999999978,
+              "maxMs": 365.9372999999978
+            },
+            "allAckLatency": {
+              "samples": 8,
+              "minMs": 314.3957999999984,
+              "p50Ms": 332.0535999999993,
+              "p95Ms": 365.9372999999978,
+              "maxMs": 365.9372999999978
+            },
+            "initialAckRate": 1,
+            "requestErrors": 0,
+            "attemptedMessages": 8,
+            "acceptedMessages": 8,
+            "expectedDeliveries": 248,
+            "receivedDeliveries": 248,
+            "deliveryRate": 1,
+            "acceptedDeliveryRate": 1,
+            "completionLatency": {
+              "samples": 8,
+              "minMs": 314.3957999999984,
+              "p50Ms": 332.0535999999993,
+              "p95Ms": 365.9372999999978,
+              "maxMs": 365.9372999999978
+            },
+            "fullAckPending": 0,
+            "drainMs": 41.32530000000406
+          },
+          "memory": {
+            "peakPrivateBytes": 293453824,
+            "peakWorkingSetBytes": 904003584,
+            "peakOwnerPrivateBytes": 12824576,
+            "maxNodePrivateBytes": 13467648,
+            "minFreeBytes": 5971693568
+          },
+          "ownerOffline": {
+            "attempts": [
+              {
+                "sender": 1,
+                "id": "4b988769-f5c3-421e-aff7-122641d63d50",
+                "ms": 8013.075299999997,
+                "error": "peer_unreachable"
+              },
+              {
+                "sender": 2,
+                "id": "3f6f3a88-4cd9-4a02-a89c-8b909a10ced5",
+                "ms": 8013.260300000002,
+                "error": "peer_unreachable"
+              },
+              {
+                "sender": 3,
+                "id": "cec02933-3591-4f03-aaa8-45e89b3328fa",
+                "ms": 8013.367600000005,
+                "error": "peer_unreachable"
+              }
+            ],
+            "allRejected": true,
+            "persistedOfflineAttempts": 0
+          },
+          "ownerRecovery": {
+            "attemptedMessages": 1,
+            "acceptedMessages": 1,
+            "expectedDeliveries": 31,
+            "receivedDeliveries": 31,
+            "deliveryRate": 1,
+            "acceptedDeliveryRate": 1,
+            "completionLatency": {
+              "samples": 1,
+              "minMs": 346.41419999999925,
+              "p50Ms": 346.41419999999925,
+              "p95Ms": 346.41419999999925,
+              "maxMs": 346.41419999999925
+            },
+            "fullAckPending": 0,
+            "drainMs": 36.00770000000193,
+            "requestMs": 346.41419999999925,
+            "restoredMembers": 32
+          }
+        },
+        {
+          "nodes": 64,
+          "passed": true,
+          "admission": {
+            "members": 64,
+            "joinLatency": {
+              "samples": 63,
+              "minMs": 14.66479999999865,
+              "p50Ms": 18.22679999999673,
+              "p95Ms": 21.45219999999972,
+              "maxMs": 23.412300000003597
+            },
+            "snapshotRawBytes": 26173
+          },
+          "workload": {
+            "steady": 16,
+            "burst": 8,
+            "concurrentSenders": 4,
+            "payloadBytes": 256,
+            "tokioWorkersPerNode": 2
+          },
+          "steady": {
+            "requestLatency": {
+              "samples": 16,
+              "minMs": 516.4947000000029,
+              "p50Ms": 590.0092000000004,
+              "p95Ms": 634.0534999999945,
+              "maxMs": 634.0534999999945
+            },
+            "allAckLatency": {
+              "samples": 15,
+              "minMs": 516.4947000000029,
+              "p50Ms": 593.9804000000004,
+              "p95Ms": 634.0534999999945,
+              "maxMs": 634.0534999999945
+            },
+            "initialAckRate": 0.9930555555555556,
+            "requestErrors": 0,
+            "attemptedMessages": 16,
+            "acceptedMessages": 16,
+            "expectedDeliveries": 1008,
+            "receivedDeliveries": 1008,
+            "deliveryRate": 1,
+            "acceptedDeliveryRate": 1,
+            "completionLatency": {
+              "samples": 16,
+              "minMs": 516.4947000000029,
+              "p50Ms": 593.9804000000004,
+              "p95Ms": 771.0285999999905,
+              "maxMs": 771.0285999999905
+            },
+            "fullAckPending": 0,
+            "drainMs": 72.28290000000561
+          },
+          "burst": {
+            "requestLatency": {
+              "samples": 8,
+              "minMs": 873.0145000000048,
+              "p50Ms": 940.8919000000024,
+              "p95Ms": 974.2085000000079,
+              "maxMs": 974.2085000000079
+            },
+            "allAckLatency": {
+              "samples": 7,
+              "minMs": 873.0145000000048,
+              "p50Ms": 940.8919000000024,
+              "p95Ms": 974.2085000000079,
+              "maxMs": 974.2085000000079
+            },
+            "initialAckRate": 0.998015873015873,
+            "requestErrors": 0,
+            "attemptedMessages": 8,
+            "acceptedMessages": 8,
+            "expectedDeliveries": 504,
+            "receivedDeliveries": 504,
+            "deliveryRate": 1,
+            "acceptedDeliveryRate": 1,
+            "completionLatency": {
+              "samples": 8,
+              "minMs": 873.0145000000048,
+              "p50Ms": 940.8919000000024,
+              "p95Ms": 1064.2609999999986,
+              "maxMs": 1064.2609999999986
+            },
+            "fullAckPending": 0,
+            "drainMs": 66.79309999999532
+          },
+          "memory": {
+            "peakPrivateBytes": 467365888,
+            "peakWorkingSetBytes": 1698930688,
+            "peakOwnerPrivateBytes": 19243008,
+            "maxNodePrivateBytes": 19243008,
+            "minFreeBytes": 7284781056
+          },
+          "ownerOffline": {
+            "attempts": [
+              {
+                "sender": 2,
+                "id": "b73b549b-d7cc-47da-98af-8d9e4247de07",
+                "ms": 8020.618499999997,
+                "error": "peer_unreachable"
+              },
+              {
+                "sender": 3,
+                "id": "082e6c78-7362-407e-8567-050d182d8bd2",
+                "ms": 8020.791400000002,
+                "error": "peer_unreachable"
+              },
+              {
+                "sender": 1,
+                "id": "77bcf190-7843-4e03-9d69-fe171e9f5c7d",
+                "ms": 8021.40939999999,
+                "error": "peer_unreachable"
+              }
+            ],
+            "allRejected": true,
+            "persistedOfflineAttempts": 0
+          },
+          "ownerRecovery": {
+            "attemptedMessages": 1,
+            "acceptedMessages": 1,
+            "expectedDeliveries": 63,
+            "receivedDeliveries": 63,
+            "deliveryRate": 1,
+            "acceptedDeliveryRate": 1,
+            "completionLatency": {
+              "samples": 1,
+              "minMs": 1208.2505999999994,
+              "p50Ms": 1208.2505999999994,
+              "p95Ms": 1208.2505999999994,
+              "maxMs": 1208.2505999999994
+            },
+            "fullAckPending": 0,
+            "drainMs": 77.67579999999725,
+            "requestMs": 1208.2505999999994,
+            "restoredMembers": 64
+          }
+        }
+      ]
+    }
+  ]
+}

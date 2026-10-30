@@ -1,0 +1,14 @@
+@layer theme,base,components,utilities,landing-reset,landing-base,landing-layout,landing-components,landing-motion;
+@import "tailwindcss";
+@import "tw-animate-css";
+@source "./";
+@theme inline {
+ --color-background: #080b09; --color-foreground: #f4f7ef;
+ --color-primary: #b9ff66; --color-primary-foreground: #10160b;
+ --color-secondary: #182019; --color-secondary-foreground: #f4f7ef;
+ --color-muted: #182019; --color-muted-foreground: #8d988f;
+ --color-accent: #253222; --color-accent-foreground: #b9ff66;
+ --color-popover: #101711; --color-popover-foreground: #f4f7ef;
+ --color-border: #ffffff20; --color-input: #ffffff20; --color-ring: #b9ff66;
+ --color-destructive: #ff6868;
+}

@@ -1,0 +1,39 @@
+name: Native release builds
+on:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  build:
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: windows-latest
+            target: x86_64-pc-windows-msvc
+            asset: windows-x86_64
+            executable: aiconnect.exe
+          - os: ubuntu-22.04
+            target: x86_64-unknown-linux-gnu
+            asset: linux-x86_64
+            executable: aiconnect
+          - os: macos-14
+            target: aarch64-apple-darwin
+            asset: macos-aarch64
+            executable: aiconnect
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@1.95.0
+      - name: Build native executable
+        run: cargo build --locked --release --package aiconnect-cli --target ${{ matrix.target }}
+      - name: Test native workspace
+        env:
+          AICONNECT_TEST_LOOPBACK: "1"
+        run: cargo test --locked --workspace --target ${{ matrix.target }}
+      - name: Upload build for review
+        uses: actions/upload-artifact@v4
+        with:
+          name: aiconnect-${{ matrix.asset }}
+          path: target/${{ matrix.target }}/release/${{ matrix.executable }}
+          if-no-files-found: error

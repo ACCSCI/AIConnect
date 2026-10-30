@@ -1,0 +1,44 @@
+/*
+  X-Content-Type-Options: nosniff
+  Referrer-Policy: no-referrer
+  X-Frame-Options: DENY
+  Permissions-Policy: camera=(), microphone=(), geolocation=()
+  Content-Security-Policy: default-src 'none'; script-src 'self'; style-src 'self' 'unsafe-inline'; font-src 'self'; img-src 'self' data:; connect-src 'none'; base-uri 'none'; form-action 'none'; frame-ancestors 'none'
+
+/healthz
+  Content-Type: application/json; charset=utf-8
+  Cache-Control: no-store
+
+/.well-known/skills/*
+  Access-Control-Allow-Origin: *
+  Cache-Control: public, max-age=300
+
+/.well-known/skills/index.json
+  Content-Type: application/json; charset=utf-8
+
+/.well-known/skills/aiconnect/SKILL.md
+  Content-Type: text/markdown; charset=utf-8
+
+/.well-known/skills/aiconnect/references/*
+  Content-Type: text/markdown; charset=utf-8
+
+/install.ps1
+  Content-Type: text/plain; charset=utf-8
+  Cache-Control: no-cache
+
+/install.sh
+  Content-Type: text/x-shellscript; charset=utf-8
+  Cache-Control: no-cache
+
+/install.mjs
+  Content-Type: text/javascript; charset=utf-8
+  Cache-Control: no-cache
+
+/.well-known/skills/aiconnect/scripts/*
+  Content-Type: text/plain; charset=utf-8
+
+/releases/*
+  Cache-Control: no-cache
+
+/releases/stable.json
+  Content-Type: application/json; charset=utf-8
