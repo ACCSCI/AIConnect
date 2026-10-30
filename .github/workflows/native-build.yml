@@ -25,6 +25,9 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: dtolnay/rust-toolchain@1.95.0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "24"
       - name: Build native executable
         run: cargo build --locked --release --package aiconnect-cli --target ${{ matrix.target }}
       - name: Test native workspace

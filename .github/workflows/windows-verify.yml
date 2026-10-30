@@ -1,0 +1,18 @@
+name: Windows verification
+on:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  verify:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@1.95.0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "24"
+      - run: node --version
+      - run: cargo test --locked --workspace -j 2
+        env:
+          AICONNECT_TEST_LOOPBACK: "1"

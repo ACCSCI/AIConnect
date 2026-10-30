@@ -206,7 +206,16 @@ mod tests {
         channel_notifications_tick(&core, &directory, &state_path, &mut state)
             .await
             .unwrap();
-        assert_eq!(std::fs::read_to_string(&log).unwrap().lines().count(), 1);
+        assert_eq!(
+            std::fs::read_to_string(&log)
+                .unwrap_or_else(|e| panic!(
+                    "adapter test log missing: {e}; command={:?}; claims={:?}",
+                    attachment.command, state.claims
+                ))
+                .lines()
+                .count(),
+            1
+        );
         let request: Value = serde_json::from_str(
             std::fs::read_to_string(&log)
                 .unwrap()

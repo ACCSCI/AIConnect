@@ -1,0 +1,14 @@
+import {execFile} from 'node:child_process';
+import {promisify} from 'node:util';
+import {mkdtemp,readFile,mkdir} from 'node:fs/promises';
+import {resolve} from 'node:path';
+import assert from 'node:assert/strict';
+const root=resolve(import.meta.dirname,'..');
+const base='https://connect.lumigrav.space';
+await mkdir(resolve(root,'.local'),{recursive:true});
+const cwd=await mkdtemp(resolve(root,'.local/production-skill-'));
+const run=promisify(execFile);
+const result=await run(process.execPath,[resolve(root,'node_modules/skills/bin/cli.mjs'),'add',base,'--skill','aiconnect','-a','codex','-y','--copy'],{cwd,timeout:60000,windowsHide:true,env:{...process.env,DISABLE_TELEMETRY:'1',DO_NOT_TRACK:'1',NO_COLOR:'1'}});
+const files=JSON.parse(await readFile(resolve(root,'public/.well-known/skills/files.json'),'utf8')).skills[0].files;
+for(const file of files)assert.deepEqual(await readFile(resolve(cwd,'.agents/skills/aiconnect',file)),await readFile(resolve(root,'public/.well-known/skills/aiconnect',file)),`complete production Skill: ${file}`);
+console.log(JSON.stringify({ok:true,source:base,officialSkillsVersion:'1.7.4',files:files.length,allBytesMatch:true,globalConfigurationChanged:false,installed:resolve(cwd,'.agents/skills/aiconnect')}));
