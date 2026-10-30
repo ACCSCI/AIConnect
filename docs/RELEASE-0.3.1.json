@@ -25,6 +25,14 @@
       "incrementalTransferVerified": false
     },
     "nativeDefaultGroup": {"maxMembers": 64, "ownerLimitCommandPassed": true},
+    "signedBootstrapUpgradeFrom030": {
+      "passed": true,
+      "installedVersion": "0.3.1",
+      "identityPreserved": true,
+      "localDataPreserved": true,
+      "newGroupDefaultMembers": 64,
+      "globalConfigurationChanged": false
+    },
     "publicChannelScale": {
       "logicalSubscriptions": 1000,
       "consumerProfiles": 1,
