@@ -6,7 +6,7 @@ import '../scripts/stage.mjs';
 
 const publicRoot = resolve(import.meta.dirname, '../public');
 test('discovery index lists real downloadable skill resources', async () => {
-  const index = JSON.parse(await readFile(join(publicRoot, '.well-known/skills/index.json'), 'utf8'));
+  const index = JSON.parse(await readFile(join(publicRoot, '.well-known/skills/files.json'), 'utf8'));
   assert.equal(index.skills.length, 1);
   assert(index.skills[0].files.includes('scripts/codex-app-server.mjs'), 'Agent bridge must ship with the Skill');
   for (const skill of index.skills) {

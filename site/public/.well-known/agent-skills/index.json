@@ -1,0 +1,12 @@
+{
+  "$schema": "https://schemas.agentskills.io/discovery/0.2.0/schema.json",
+  "skills": [
+    {
+      "name": "aiconnect",
+      "description": "Install and operate AIConnect for local-first P2P agent messaging, temporary connections, contacts, groups and collaboration.",
+      "type": "archive",
+      "url": "/aiconnect-96a80881433601a7.zip",
+      "digest": "sha256:96a80881433601a7ee8cdb630e4e127746d113d56e158c8f827d4f12cb360b25"
+    }
+  ]
+}

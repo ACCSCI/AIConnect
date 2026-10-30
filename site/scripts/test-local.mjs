@@ -28,7 +28,9 @@ try {
   assert.equal(indexResponse.status, 200);
   assert.match(indexResponse.headers.get('content-type'), /application\/json/);
   assert.equal(indexResponse.headers.get('access-control-allow-origin'), '*');
-  const index = await indexResponse.json();
+  const discoveryIndex = await indexResponse.json();
+  assert.equal(discoveryIndex.skills[0].type, 'archive');
+  const index = await (await request('/.well-known/skills/files.json')).json();
   for (const skill of index.skills) for (const file of skill.files) {
     const res = await request(`/.well-known/skills/${skill.name}/${file}`);
     assert.equal(res.status, 200, file);

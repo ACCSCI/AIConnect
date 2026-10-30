@@ -19,6 +19,9 @@ The Skill guides your agent through signed native installation and local setup.
 Skill installation downloads instructions; your agent then reads and follows them.
 Choose Codex, Claude Code, or OpenCode on the website to copy a tailored instruction.
 
+GitHub source installation is also available:
+`npx skills add ACCSCI/AIConnect --skill aiconnect -g -y`.
+
 Download native binaries from [Releases](https://github.com/ACCSCI/AIConnect/releases).
 End users do not need Rust. Node.js 22.20+ is needed for the Skill/bootstrap path;
 the installed native CLI itself does not depend on Node.js.

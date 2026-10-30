@@ -1,4 +1,4 @@
-# Native distribution (pre-release)
+# Native distribution
 
 AIConnect does not publish its own npm package. Skill installation uses the existing `skills` CLI. The Skill subsequently runs this bootstrap tooling; `skills add` does not execute our installers automatically.
 
@@ -6,7 +6,7 @@ AIConnect does not publish its own npm package. Skill installation uses the exis
 
 `manifest.schema.json` describes a release envelope. Signatures cover UTF-8 `canonical(payload)` (recursive object-key sorting, arrays ordered) using Ed25519. The install command pins a trusted SPKI DER public key in Base64 via `--public-key`; a key embedded in an untrusted manifest is never accepted as a trust anchor. Each artifact also carries its exact size and SHA-256. All network downloads require HTTPS, including redirect targets. `--allow-http` enables **loopback HTTP only** for tests; unsigned manifests additionally require `--allow-unsigned` and a loopback manifest URL.
 
-There is **no production release key or signed production release yet**. Before publishing, pin the reviewed release public key in the versioned bootstrap instructions. Keep private keys in the release signing environment, never in this repository. Release artifacts are raw native binaries, not archives, removing extraction/path traversal concerns.
+The production Ed25519 public key and manifest URL are pinned in `release.json` and the versioned Skill installation guide. Keep private keys in the release signing environment, never in this repository. Release artifacts are raw native binaries, not archives, removing extraction/path traversal concerns.
 
 ## Website staging contract
 
@@ -39,3 +39,27 @@ Default install directory: `%LOCALAPPDATA%/AIConnect/bin` on Windows, `~/.local/
 Uninstall removes the installed executable and its receipt only. User identity, contacts, messages, credentials and policies remain. Purging these requires a separate explicit data-management operation; this installer deliberately has no recursive data purge.
 
 `build-manifest.mjs --input SPEC --output NEW_FILE [--key-file PRIVATE_PEM]` generates metadata from actual files. Input has `version`, optional `keyId`, and `artifacts` mapping each target to `{path,url}`. Output refuses overwriting an existing manifest. With no signing key it produces a local-test-only unsigned manifest.
+
+## Updates and Cargo
+
+`cargo install aiconnect-cli --locked` installs from crates.io and requires a Rust
+toolchain plus the platform C/C++ compiler. Native downloads on GitHub Releases
+are the default end-user installation channel. Both crates are version 0.3.0.
+
+The daemon checks a configured signed release source on each startup, in the
+background, without blocking messaging. Prebuilt installation receipts pin the
+public key and enable automatic installation for the next restart.
+
+- `aiconnect update check`: verify metadata and report a newer release.
+- `aiconnect update`: verify, download, smoke-test, back up, and replace.
+- `aiconnect update rollback`: verify and restore the previous local binary.
+- `aiconnect update configure --manifest URL --public-key KEY --automatic true|false`.
+
+The signed manifest optionally includes 256 KiB SHA-256 chunks. Matching blocks
+are reused from the installed executable; missing blocks use HTTP Range. A host
+that ignores Range falls back to a full download. Every assembled binary must
+pass its full SHA-256/size and version checks before replacement. Failed
+downloads do not change the installed binary or user data. A running daemon
+keeps its loaded version; restart it when ready to use an installed update.
+No delta backend or R2 bucket is required. The release private key stays outside
+the source repository.

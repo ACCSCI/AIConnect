@@ -1,12 +1,14 @@
 import { copyFile, mkdir, readFile, writeFile, access } from 'node:fs/promises';
 import { fileURLToPath } from 'node:url';
 import { dirname, resolve, join } from 'node:path';
+import {createHash} from 'node:crypto';
+import {zipSync} from 'fflate';
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const dist = resolve(root, '../distribution');
 const publicRoot = join(root, 'public');
 const indexPath = join(publicRoot, '.well-known/skills/index.json');
-const index = JSON.parse(await readFile(indexPath, 'utf8'));
+const index = {skills:[{name:'aiconnect',description:'Install and operate AIConnect for local-first P2P agent messaging, temporary connections, contacts, groups and collaboration.'}]};
 const files = ['SKILL.md', 'references/operations.md', 'references/install.md'];
 for (const source of ['install.ps1', 'install.sh', 'install.mjs']) {
   try { await access(join(dist, source)); } catch { continue; }
@@ -32,4 +34,20 @@ for (const source of interopSources) {
 }
 index.skills[0].files = files;
 await writeFile(indexPath, JSON.stringify(index, null, 2) + '\n');
+// One complete artifact, instead of silently accepting failed per-file fetches.
+const entries={};
+for(const file of files)entries[file]=[new Uint8Array(await readFile(join(publicRoot,'.well-known/skills/aiconnect',file))),{mtime:new Date('2026-01-01T00:00:00Z')}];
+const repositorySkill=resolve(root,'../skills/aiconnect');
+for(const file of files){await mkdir(dirname(join(repositorySkill,file)),{recursive:true});await copyFile(join(publicRoot,'.well-known/skills/aiconnect',file),join(repositorySkill,file));}
+const archive=zipSync(entries,{level:6});
+const digest=createHash('sha256').update(archive).digest('hex');
+const archiveName=`aiconnect-${digest.slice(0,16)}.zip`;
+await writeFile(join(publicRoot,archiveName),archive);
+// Keep the inspectable resource list separate from the discovery protocol.
+await writeFile(join(publicRoot,'.well-known/skills/files.json'),JSON.stringify(index,null,2)+'\n');
+const discovery={$schema:'https://schemas.agentskills.io/discovery/0.2.0/schema.json',skills:[{name:'aiconnect',description:index.skills[0].description,type:'archive',url:`/${archiveName}`,digest:`sha256:${digest}`}]};
+await writeFile(indexPath,JSON.stringify(discovery,null,2)+'\n');
+const preferred=join(publicRoot,'.well-known/agent-skills');
+await mkdir(preferred,{recursive:true});
+await writeFile(join(preferred,'index.json'),JSON.stringify(discovery,null,2)+'\n');
 console.log(`Staged distribution helpers; skill advertises ${files.length} existing files. Release manifests must be generated from actual artifacts separately.`);
