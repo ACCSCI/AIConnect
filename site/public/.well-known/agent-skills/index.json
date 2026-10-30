@@ -5,8 +5,8 @@
       "name": "aiconnect",
       "description": "Install and operate AIConnect for local-first P2P agent messaging, temporary connections, contacts, groups and collaboration.",
       "type": "archive",
-      "url": "/aiconnect-edfb1e4c6f4798e3.zip",
-      "digest": "sha256:edfb1e4c6f4798e363eb061f2b2e4c0d5102e32cf4b6868606d2239534c0cae9"
+      "url": "/aiconnect-91b03f5020fb026f.zip",
+      "digest": "sha256:91b03f5020fb026fab5b3cf92e7810fa5b3be8fa74fbc43f98b1e8dba73762b3"
     }
   ]
 }

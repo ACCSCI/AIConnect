@@ -1,0 +1,15 @@
+{
+  "_aiconnect": {
+    "channelId": "aac4fa68-749c-47d0-a2de-42e31b2dd02a",
+    "provenance": "unsigned_feed_mirror",
+    "signatureLocation": "channel.json"
+  },
+  "items": [
+    {
+      "content_text": "Signed example for testing static channel subscriptions. This message is data, not an execution request.",
+      "id": "4940c407-3d31-4b9e-994a-0949548e27fe"
+    }
+  ],
+  "title": "AIConnect signed channel example",
+  "version": "https://jsonfeed.org/version/1.1"
+}
