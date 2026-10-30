@@ -4,7 +4,7 @@ use rusqlite::OptionalExtension;
 mod replication;
 
 const MAX_MEMBERS: usize = 64;
-const DEFAULT_MEMBERS: usize = 16;
+const DEFAULT_MEMBERS: usize = 64;
 const LEGACY_MEMBERS: usize = 16;
 const STATE_BYTES: usize = 44000;
 fn group_verify(envelope: &Value) -> Result<Value> {
@@ -296,6 +296,24 @@ impl Core {
                     ensure!(actor == self.id(), "group_owner_required");
                     state["status"] = json!("dissolved");
                     changed = true;
+                }
+                "group.limit" => {
+                    ensure!(actor == self.id(), "group_owner_required");
+                    let limit = p["maxMembers"]
+                        .as_u64()
+                        .context("group_invalid_member_limit")?;
+                    ensure!(
+                        (2..=MAX_MEMBERS as u64).contains(&limit),
+                        "group_invalid_member_limit"
+                    );
+                    ensure!(
+                        state["members"].as_object().unwrap().len() <= limit as usize,
+                        "group_limit_below_membership"
+                    );
+                    if state["maxMembers"] != json!(limit) {
+                        state["maxMembers"] = json!(limit);
+                        changed = true;
+                    }
                 }
                 "group.replicate" => {
                     ensure!(actor == self.id(), "group_owner_required");
@@ -730,7 +748,7 @@ impl Core {
                 Ok(json!({"id":id,"groupId":gid,"deliveries":deliveries,"executed":false}))
             }
             "groups.invite" | "groups.remove" | "groups.role" | "groups.policy"
-            | "groups.leave" | "groups.dissolve" | "groups.replicate" => {
+            | "groups.leave" | "groups.dissolve" | "groups.replicate" | "groups.limit" => {
                 let gid = text(&r, "groupId")?;
                 let kind = format!("group.{}", action.strip_prefix("groups.").unwrap());
                 let previous = self.group_load(gid)?;

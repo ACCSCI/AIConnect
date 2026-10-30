@@ -381,3 +381,48 @@ async fn configured_limit_is_signed_and_enforced_without_consuming_failed_invite
         p.close().await;
     }
 }
+
+#[tokio::test]
+async fn default_64_and_owner_only_capacity_changes_are_signed_and_replicated() {
+    let (_da, a) = peer().await;
+    let (_db, b) = peer().await;
+    let (_dc, c) = peer().await;
+    let new = a
+        .dispatch(json!({"action":"groups.create","name":"default capacity"}))
+        .await
+        .unwrap();
+    assert_eq!(new["group"]["maxMembers"], 64);
+    let created = a
+        .dispatch(json!({"action":"groups.create","name":"existing small group","maxMembers":2}))
+        .await
+        .unwrap();
+    let gid = created["group"]["groupId"].as_str().unwrap();
+    join(&b, &invite(&a, &b, gid).await).await;
+    assert!(
+        b.dispatch(json!({"action":"groups.limit","groupId":gid,"maxMembers":64}))
+            .await
+            .is_err()
+    );
+    let changed = a
+        .dispatch(json!({"action":"groups.limit","groupId":gid,"maxMembers":64}))
+        .await
+        .unwrap();
+    assert_eq!(changed["group"]["maxMembers"], 64);
+    assert!(
+        changed["group"]["epoch"].as_u64().unwrap() > created["group"]["epoch"].as_u64().unwrap()
+    );
+    join(&c, &invite(&a, &c, gid).await).await;
+    let snapshot = b
+        .dispatch(json!({"action":"groups.sync","groupId":gid}))
+        .await
+        .unwrap();
+    assert_eq!(snapshot["group"]["maxMembers"], 64);
+    assert!(
+        a.dispatch(json!({"action":"groups.limit","groupId":gid,"maxMembers":2}))
+            .await
+            .is_err()
+    );
+    for p in [&a, &b, &c] {
+        p.close().await;
+    }
+}

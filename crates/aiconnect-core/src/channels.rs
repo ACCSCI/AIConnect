@@ -236,13 +236,17 @@ impl Core {
                     "channel_invalid_visibility"
                 );
                 if visibility == "private" {
-                    let group=self.group_action(json!({"action":"groups.create","name":name,"channel":true,"maxMembers":r["maxMembers"].as_u64().unwrap_or(16)})).await?;
+                    let group=self.group_action(json!({"action":"groups.create","name":name,"channel":true,"maxMembers":r["maxMembers"]})).await?;
                     Ok(
                         json!({"channelId":group["group"]["groupId"],"visibility":"private","group":group["group"]}),
                     )
                 } else {
+                    ensure!(
+                        r["maxMembers"].is_null(),
+                        "public_channel_has_no_member_limit_use_static_subscriptions"
+                    );
                     let id = uid();
-                    let channel = json!({"channelId":id,"name":name,"visibility":"public","publisher":self.id(),"lastSequence":0,"created":now()});
+                    let channel = json!({"channelId":id,"name":name,"visibility":"public","publisher":self.id(),"lastSequence":0,"created":now(),"distribution":"signed-static-pull","subscriberLimit":null,"subscriberRegistry":false,"publisherFanout":false});
                     self.put("channels_local", &id, &channel)?;
                     Ok(json!({"channelId":id,"channel":channel,"publishedExternally":false}))
                 }
@@ -408,6 +412,25 @@ impl Core {
                 if let Some(gid) = gid {
                     self.channel_group_snapshot(gid)?;
                 }
+                let mirrors = r["mirrors"].as_array().cloned().unwrap_or_default();
+                ensure!(mirrors.len() <= 3, "channel_too_many_mirrors");
+                if !mirrors.is_empty() {
+                    ensure!(
+                        url.is_some() && r["expectedPublisher"].as_str().is_some(),
+                        "channel_mirrors_require_pinned_public_source"
+                    );
+                    for mirror in &mirrors {
+                        let parsed = reqwest::Url::parse(
+                            mirror.as_str().context("channel_invalid_mirror")?,
+                        )?;
+                        ensure!(
+                            parsed.scheme() == "https"
+                                && parsed.username().is_empty()
+                                && parsed.password().is_none(),
+                            "channel_https_required"
+                        );
+                    }
+                }
                 let existing = self.load("channel_subscriptions", &id).ok();
                 ensure!(
                     self.load("channels_local", &id).is_err(),
@@ -430,6 +453,7 @@ impl Core {
                     sub["expectedPublisher"] = json!(pin);
                 }
                 sub["active"] = json!(true);
+                sub["mirrors"] = json!(mirrors);
                 if let Some(wake) = r["wake"].as_bool() {
                     self.channel_set_wake(&mut sub, wake)?;
                 }
@@ -612,15 +636,29 @@ impl Core {
                     now() >= sub["nextPoll"].as_i64().unwrap_or(0),
                     "channel_poll_backoff"
                 );
-                let response = self
+                let mut urls = vec![text(&sub, "url")?.to_owned()];
+                if let Some(mirrors) = sub["mirrors"].as_array() {
+                    urls.extend(
+                        mirrors
+                            .iter()
+                            .filter_map(Value::as_str)
+                            .take(3)
+                            .map(str::to_owned),
+                    );
+                }
+                let mut response = Err(anyhow::anyhow!("channel_no_source_available"));
+                for url in urls {
+                    let cache_matches =
+                        sub["fetchUrl"].as_str().unwrap_or(text(&sub, "url")?) == url;
+                    let attempt = self
                     .governance_http_get(
-                        text(&sub, "url")?,
-                        sub["etag"].as_str(),
-                        sub["lastModified"].as_str(),
+                        &url,
+                        if cache_matches {sub["etag"].as_str()} else {None},
+                        if cache_matches {sub["lastModified"].as_str()} else {None},
                         MANIFEST_LIMIT,
                     )
                     .await
-                    .and_then(|response| {
+                    .and_then(|mut response| {
                         let status = response["status"].as_u64().unwrap_or(0);
                         ensure!(
                             status == 200 || status == 304,
@@ -631,12 +669,19 @@ impl Core {
                         } else {
                             self.channel_import_body(id, text(&response, "body")?, "https_source")?
                         };
+                        response["fetchUrl"] = json!(url);
                         Ok((response, result))
                     });
+                    response = attempt;
+                    if response.is_ok() {
+                        break;
+                    }
+                }
                 match response {
                     Ok((response, result)) => {
                         sub = self.load("channel_subscriptions", id)?;
                         sub["etag"] = response["etag"].clone();
+                        sub["fetchUrl"] = response["fetchUrl"].clone();
                         sub["lastModified"] = response["lastModified"].clone();
                         sub["nextPoll"] = json!(now() + 60000);
                         sub["failures"] = json!(0);
