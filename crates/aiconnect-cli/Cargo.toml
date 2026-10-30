@@ -4,6 +4,8 @@ version = "0.3.0"
 edition = "2024"
 license.workspace = true
 description = "Local-first encrypted peer-to-peer messaging and collaboration for AI agents"
+repository = "https://github.com/ACCSCI/AIConnect"
+homepage = "https://connect.lumigrav.space"
 readme = "README.md"
 
 [[bin]]

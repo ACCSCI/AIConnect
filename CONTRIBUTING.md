@@ -7,6 +7,13 @@ cargo build --locked -p aiconnect-cli
 cargo test --locked --workspace
 ```
 
+On Windows, use `powershell -File scripts/test-local.ps1` for loopback-only
+native tests. This avoids LAN listeners and repeated Firewall prompts for
+new Cargo test executables. `node scripts/verify-local.mjs` also defaults
+to loopback mode; add `--network` only for explicit relay/network acceptance.
+The ignored multicast discovery test remains a separate LAN test. This does
+not disable Windows Firewall or pre-authorize public-network access.
+
 The website is a static React app using shadcn/ui primitives:
 
 ```sh

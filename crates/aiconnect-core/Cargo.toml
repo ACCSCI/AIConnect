@@ -4,6 +4,8 @@ version.workspace = true
 edition.workspace = true
 license.workspace = true
 description = "Local-first encrypted AI agent communication over iroh"
+repository = "https://github.com/ACCSCI/AIConnect"
+homepage = "https://connect.lumigrav.space"
 readme = "README.md"
 
 [dependencies]
