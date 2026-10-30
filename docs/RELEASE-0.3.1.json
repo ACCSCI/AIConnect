@@ -1,0 +1,40 @@
+{
+  "version": "0.3.1",
+  "releasedOn": "2026-10-30",
+  "repository": "https://github.com/ACCSCI/AIConnect",
+  "release": "https://github.com/ACCSCI/AIConnect/releases/tag/v0.3.1",
+  "website": {
+    "url": "https://connect.lumigrav.space/",
+    "deploymentVersion": "43b7079c-5cf5-4fc2-b70f-56badb7c27ac",
+    "staticOnly": true,
+    "r2": false
+  },
+  "crates": ["aiconnect-core@0.3.1", "aiconnect-cli@0.3.1"],
+  "verification": {
+    "allPlatformWorkspace": "https://github.com/ACCSCI/AIConnect/actions/runs/41072338079",
+    "artifactSourceCommit": "54b1ae31ae12009b086e61c11243a0afad3664dd",
+    "localWorkspace": {"passed": 71, "ignored": 1},
+    "productionSkill": {"client": "skills@1.7.4", "files": 15, "allBytesMatch": true},
+    "releaseAssets": {"serverDigestsMatch": true, "manifestSignatureVerified": true},
+    "nativeUpdateFrom030": {
+      "checkPassed": true,
+      "signatureVerified": true,
+      "installPassed": false,
+      "error": "error decoding response body",
+      "oldExecutablePreserved": true,
+      "incrementalTransferVerified": false
+    },
+    "nativeDefaultGroup": {"maxMembers": 64, "ownerLimitCommandPassed": true},
+    "publicChannelScale": {
+      "logicalSubscriptions": 1000,
+      "consumerProfiles": 1,
+      "publisherOfflineAtImport": true,
+      "physicalDeviceBenchmark": false
+    },
+    "httpsMirrorRuntime": {
+      "passed": false,
+      "blocker": "http_ssrf_denied in this host network after registering the free project-owned static source",
+      "securityChecksWeakened": false
+    }
+  }
+}
