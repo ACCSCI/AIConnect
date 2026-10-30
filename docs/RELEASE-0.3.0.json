@@ -1,0 +1,72 @@
+{
+  "version": "0.3.0",
+  "releasedOn": "2026-10-30",
+  "website": {
+    "zh": "https://connect.lumigrav.space/",
+    "en": "https://connect.lumigrav.space/en/",
+    "deploymentVersion": "7aafec56-d886-4690-8a7b-2d52867244e8",
+    "staticOnly": true,
+    "r2": false
+  },
+  "repository": "https://github.com/ACCSCI/AIConnect",
+  "release": "https://github.com/ACCSCI/AIConnect/releases/tag/v0.3.0",
+  "crates": [
+    "https://crates.io/crates/aiconnect-core/0.3.0",
+    "https://crates.io/crates/aiconnect-cli/0.3.0"
+  ],
+  "brand": "Original AIConnect companion mark",
+  "verification": {
+    "linuxAndMacWorkspace": "https://github.com/ACCSCI/AIConnect/actions/runs/41063636269",
+    "windowsWorkspace": "https://github.com/ACCSCI/AIConnect/actions/runs/41065939510",
+    "windowsLocalWorkspace": {
+      "passed": 68,
+      "ignored": 1,
+      "note": "Explicit multicast LAN test ignored in loopback mode"
+    },
+    "productionSkill": {
+      "client": "skills@1.7.4",
+      "files": 15,
+      "allBytesMatch": true,
+      "discovery": "0.2.0 archive + sha256"
+    },
+    "nativeWindowsInstall": {
+      "passed": true,
+      "source": "https://connect.lumigrav.space/releases/stable.json",
+      "installedVersion": "0.3.0",
+      "signatureVerified": true,
+      "nativeSetup": true,
+      "updateCheck": true,
+      "loopbackOnly": true,
+      "globalConfigurationChanged": false
+    },
+    "websiteWidthsChecked": [
+      320,
+      390,
+      1440
+    ],
+    "buttonTextColor": "rgb(23, 32, 15)"
+  },
+  "artifacts": {
+    "windows-x86_64": {
+      "url": "https://github.com/ACCSCI/AIConnect/releases/download/v0.3.0/aiconnect-windows-x86_64.exe",
+      "sha256": "f7d10f5a48fb3e268bdb5c56abea489b14d2d58ee9b4b0dcef59a34d5adab92c",
+      "size": 30291456
+    },
+    "linux-x86_64": {
+      "url": "https://github.com/ACCSCI/AIConnect/releases/download/v0.3.0/aiconnect-linux-x86_64",
+      "sha256": "374896a82aa171e0f19e90528289658f22bd250721af8d917a2a304d09e321dd",
+      "size": 32216512
+    },
+    "macos-aarch64": {
+      "url": "https://github.com/ACCSCI/AIConnect/releases/download/v0.3.0/aiconnect-macos-aarch64",
+      "sha256": "14492fcf62ffa4db01d8c4eafeb74438d409abad0a2ee06888d0ec2589ff841a",
+      "size": 25759168
+    }
+  },
+  "limits": [
+    "No cross-network NAT test was performed in this release session.",
+    "Startup updates install for the next daemon restart; active work is not restarted.",
+    "Loopback tests reduce Windows Firewall prompts; first real LAN/P2P access can still require system approval.",
+    "The React Bits website effect retains its separate MIT + Commons Clause license."
+  ]
+}
